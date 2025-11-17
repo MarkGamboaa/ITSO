@@ -9,9 +9,7 @@ class Auth extends BaseController
         $data = ['title' => 'Login'];
 
         return view('include/head_view', $data)
-            .view('include/nav_view')
-            .view('ITSO/auth/auth_login_view', $data)
-            .view('include/foot_view');
+            .view('ITSO/auth/auth_login_view', $data);
     }
 
     public function login()
@@ -67,8 +65,6 @@ class Auth extends BaseController
         $data = ['title' => 'Reset Password'];
 
         return view('include/head_view', $data)
-            .view('include/nav_view')
-            .view('ITSO/auth/auth_reset_view', $data)
-            .view('include/foot_view');
+            .view('ITSO/auth/auth_reset_view', $data);
     }
 }
