@@ -119,5 +119,8 @@
                         <a href="<?= base_url('users/register') ?>" class="btn btn-outline-secondary">Register User</a>
                     </div>
                 </div>
+                <div class="mt-3">
+                    <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger">Logout</a>
+                </div>
     </div>
 </main>
