@@ -4,8 +4,22 @@ namespace App\Controllers;
 
 class Returns extends BaseController
 {
+    protected function auth()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+        return null;
+
+    }
     public function index()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+
         $data = ['title' => 'Returns'];
 
         return view('include/head_view', $data)
@@ -16,6 +30,10 @@ class Returns extends BaseController
 
     public function process()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Process Return'];
 
         return view('include/head_view', $data)
