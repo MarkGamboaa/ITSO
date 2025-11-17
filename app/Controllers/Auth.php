@@ -28,6 +28,10 @@ class Auth extends BaseController
         $usersModel = model('Users_model');
         $user = $usersModel->where('email', $email)->first();
 
+        if (strcasecmp($user['role'] ?? '', 'ITSO') !== 0) {
+            $session->setFlashdata('msg', 'Only ITSO personnel can login.');
+            return redirect()->to(base_url('auth/login'));
+        }
         $stored = $user['password'] ?? '';
 
         // Support hashed passwords (recommended) or plain-text fallback
@@ -38,6 +42,7 @@ class Auth extends BaseController
             $passwordOk = true; // fallback if DB holds plain text (not recommended)
         }
 
+        
         if ($passwordOk) {
             $session->set([
                 'user_id'    => $user['id'] ?? 0,
