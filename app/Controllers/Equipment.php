@@ -4,8 +4,22 @@ namespace App\Controllers;
 
 class Equipment extends BaseController
 {
+    protected function auth()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+        return null;
+
+    }
+
     public function index()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Equipment'];
 
         return view('include/head_view', $data)
@@ -16,6 +30,10 @@ class Equipment extends BaseController
 
     public function add()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Add Equipment'];
 
         return view('include/head_view', $data)
@@ -25,7 +43,11 @@ class Equipment extends BaseController
     }
 
     public function edit($id = null)
-    {
+    {   
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Edit Equipment', 'id' => $id];
 
         return view('include/head_view', $data)
@@ -36,6 +58,10 @@ class Equipment extends BaseController
 
     public function view($id = null)
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'View Equipment', 'id' => $id];
 
         return view('include/head_view', $data)
@@ -46,6 +72,10 @@ class Equipment extends BaseController
 
     public function deactivate($id = null)
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Deactivate Equipment', 'id' => $id];
 
         return view('include/head_view', $data)
