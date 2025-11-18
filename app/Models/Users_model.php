@@ -17,6 +17,8 @@ class Users_model extends Model {
         'fullname',
         'email',
         'datecreated',
+        'role',
+        'status', 
         'isverified',
         'token'
     ];
