@@ -9,7 +9,7 @@ $pager->setSurroundCount(2);
 ?>
 
 <nav aria-label="<?= lang('Pager.pageNavigation') ?>">
-	<ul class="pagination">
+	<ul class="pagination justify-content-start">
 		<?php if ($pager->hasPrevious()) : ?>
 			<li>
 				<a href="<?= $pager->getFirst() ?>" aria-label="<?= lang('Pager.first') ?>">
@@ -24,8 +24,8 @@ $pager->setSurroundCount(2);
 		<?php endif ?>
 
 		<?php foreach ($pager->links() as $link) : ?>
-			<li <?= $link['active'] ? 'class="active"' : '' ?>>
-				<a href="<?= $link['uri'] ?>">
+			<li <?= $link['active'] ? 'class="active page-item"' : 'class="page-item"' ?>>
+				<a href="<?= $link['uri'] ?>" class="page-link">
 					<?= $link['title'] ?>
 				</a>
 			</li>
