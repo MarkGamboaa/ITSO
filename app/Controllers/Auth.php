@@ -25,14 +25,14 @@ class Auth extends BaseController
         $password = $this->request->getPost('password');
 
         // instantiate model using full namespace (more reliable)
-        $usersModel = model('Users_model');
-        $user = $usersModel->where('email', $email)->first();
+        $adminModel = model('Admin_model');
+        $auser = $adminModel->where('email', $email)->first();
 
-        if (strcasecmp($user['role'] ?? '', 'ITSO') !== 0) {
-            $session->setFlashdata('msg', 'Only ITSO personnel can login.');
+        if (empty($auser) || strcasecmp($auser['role'] ?? '', 'ITSO') !== 0) {
+        $session->setFlashdata('msg', 'Only ITSO personnel can login.');
             return redirect()->to(base_url('auth/login'));
         }
-        $stored = $user['password'] ?? '';
+        $stored = $auser['password'] ?? '';
 
         // Support hashed passwords (recommended) or plain-text fallback
         $passwordOk = false;
@@ -45,9 +45,9 @@ class Auth extends BaseController
         
         if ($passwordOk) {
             $session->set([
-                'user_id'    => $user['id'] ?? 0,
-                'username'   => $user['username'] ?? '',
-                'email'      => $user['email'] ?? '',
+                'user_id'    => $auser['id'] ?? 0,
+                'username'   => $auser['username'] ?? '',
+                'email'      => $auser['email'] ?? '',
                 'isLoggedIn' => true,
             ]);
             // redirect to the app home (Index::index) which enforces auth()
