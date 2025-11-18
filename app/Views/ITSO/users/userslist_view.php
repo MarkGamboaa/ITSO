@@ -13,29 +13,21 @@
                 </tr>
             </thead>
             <tbody>
+                <?php foreach($users as $user): ?>
                 <tr>
-                    <td>1</td>
-                    <td>Marlon Viluz</td>
-                    <td>Student</td>
-                    <td>Active</td>
+                    <td><?= $user['id'] ?></td>
+                    <td><?= $user['fullname'] ?></td>
+                    <td><?= $user['role'] ?></td>
+                    <td><?= $user['status'] ?></td>
                     <td>
-                        <a class="btn btn-sm btn-primary" href="<?= base_url('users/view/1') ?>">View</a> 
-                        <a class="btn btn-sm btn-secondary" href="<?= base_url('users/edit/1') ?>">Edit</a>
-                        <a class="btn btn-sm btn-danger" href="<?= base_url('users/deactivate/1') ?>">Deactivate</a>
+                        <a class="btn btn-sm btn-primary" href="<?= base_url('users/view/' . $user['id']) ?>">View</a> 
+                        <a class="btn btn-sm btn-secondary" href="<?= base_url('users/edit/' . $user['id']) ?>">Edit</a>
+                        <a class="btn btn-sm btn-danger" href="<?= base_url('users/deactivate/' . $user['id']) ?>">Deactivate</a>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>JayCee</td>
-                    <td>Associate</td>
-                    <td>Active</td>
-                    <td>
-                        <a class="btn btn-sm btn-primary" href="<?= base_url('users/view/1') ?>">View</a> 
-                        <a class="btn btn-sm btn-secondary" href="<?= base_url('users/edit/1') ?>">Edit</a>
-                        <a class="btn btn-sm btn-danger" href="<?= base_url('users/deactivate/1') ?>">Deactivate</a>
-                    </td>
-                </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
+        <?= $pager->links(); ?>
     </div>
 </main>
