@@ -18,10 +18,19 @@ class Users extends BaseController {
         if ($check !== null) {
             return $check;
         }
-        $data = array(
-            'title' => 'Users List',
-        );
 
+        // load model and fetch users
+        $usermodel = model('Users_model');
+
+        // normalize fields expected by the view
+        
+
+        $data = array (
+            'title' => 'Users List',
+            'users' => $usermodel->paginate(3),
+            'pager' => $usermodel->pager
+        );
+        $usermodel->pager->setPath('users');
         return view('include/head_view', $data)
             .view('include/nav_view')
             .view('ITSO/users/userslist_view', $data)
