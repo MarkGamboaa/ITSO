@@ -4,8 +4,22 @@ namespace App\Controllers;
 
 class Products extends BaseController
 {
+    protected function auth()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+        return null;
+
+    }
     public function index()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+
         $data = array(
             'title' => 'Products List',
         );
@@ -18,6 +32,10 @@ class Products extends BaseController
     
     public function add()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = [
             'title' => 'Add New Product',
         ];
@@ -30,6 +48,10 @@ class Products extends BaseController
     
     public function edit($id = null)
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = [
             'title' => 'Edit Product',
             'id' => $id
@@ -43,6 +65,10 @@ class Products extends BaseController
     
     public function view($id = null)
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = [
             'title' => 'View Product',
             'id' => $id

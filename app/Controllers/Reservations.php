@@ -4,8 +4,22 @@ namespace App\Controllers;
 
 class Reservations extends BaseController
 {
+    protected function auth()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+        return null;
+
+    }
     public function index()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+
         $data = ['title' => 'Reservations'];
 
         return view('include/head_view', $data)
@@ -16,6 +30,10 @@ class Reservations extends BaseController
 
     public function reserve()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Reserve Equipment'];
 
         return view('include/head_view', $data)
@@ -26,6 +44,10 @@ class Reservations extends BaseController
 
     public function manage()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Manage Reservations'];
 
         return view('include/head_view', $data)

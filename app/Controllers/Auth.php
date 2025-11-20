@@ -4,14 +4,65 @@ namespace App\Controllers;
 
 class Auth extends BaseController
 {
-    public function login()
+    public function index()
     {
         $data = ['title' => 'Login'];
 
         return view('include/head_view', $data)
-            .view('include/nav_view')
-            .view('ITSO/auth/auth_login_view', $data)
-            .view('include/foot_view');
+            .view('ITSO/auth/auth_login_view', $data);
+    }
+
+    public function login()
+    {
+        $session = session();
+
+        // Only accept POST
+        if ($this->request->getMethod() !== 'post') {
+            
+        }
+
+        $email = strtolower(trim($this->request->getPost('email')));
+        $password = $this->request->getPost('password');
+
+        // instantiate model using full namespace (more reliable)
+        $adminModel = model('Admin_model');
+        $auser = $adminModel->where('email', $email)->first();
+
+        if (empty($auser) || strcasecmp($auser['role'] ?? '', 'ITSO') !== 0) {
+        $session->setFlashdata('msg', 'Only ITSO personnel can login.');
+            return redirect()->to(base_url('auth/login'));
+        }
+        $stored = $auser['password'] ?? '';
+
+        // Support hashed passwords (recommended) or plain-text fallback
+        $passwordOk = false;
+        if (! empty($stored) && password_verify($password, $stored)) {
+            $passwordOk = true;
+        } elseif ($password === $stored) {
+            $passwordOk = true; // fallback if DB holds plain text (not recommended)
+        }
+
+        
+        if ($passwordOk) {
+            $session->set([
+                'user_id'    => $auser['id'] ?? 0,
+                'username'   => $auser['username'] ?? '',
+                'email'      => $auser['email'] ?? '',
+                'isLoggedIn' => true,
+            ]);
+            // redirect to the app home (Index::index) which enforces auth()
+            return redirect()->to(base_url('/'));
+        }
+
+        $session->setFlashdata('msg', 'Invalid login credentials.');
+        return redirect()->to(base_url('auth/login'));
+    }
+
+    public function logout()
+    {
+        $session = session();
+        $session->destroy();
+        return redirect()->to(base_url('auth/index'));
     }
 
     public function reset()
@@ -19,8 +70,6 @@ class Auth extends BaseController
         $data = ['title' => 'Reset Password'];
 
         return view('include/head_view', $data)
-            .view('include/nav_view')
-            .view('ITSO/auth/auth_reset_view', $data)
-            .view('include/foot_view');
+            .view('ITSO/auth/auth_reset_view', $data);
     }
 }

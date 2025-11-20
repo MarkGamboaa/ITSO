@@ -4,8 +4,22 @@ namespace App\Controllers;
 
 class Reports extends BaseController
 {
+    protected function auth()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+        return null;
+
+    }
     public function index()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+
         $data = ['title' => 'Reports'];
 
         return view('include/head_view', $data)
@@ -16,6 +30,10 @@ class Reports extends BaseController
 
     public function activeEquipment()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Active Equipment Report'];
 
         return view('include/head_view', $data)
@@ -26,6 +44,10 @@ class Reports extends BaseController
 
     public function unusableEquipment()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'Unusable Equipment Report'];
 
         return view('include/head_view', $data)
@@ -36,6 +58,10 @@ class Reports extends BaseController
 
     public function userHistory()
     {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
         $data = ['title' => 'User History Report'];
 
         return view('include/head_view', $data)

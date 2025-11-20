@@ -18,7 +18,8 @@ $routes->get('users/edit/(:any)', 'Users::edit/$1');
 $routes->get('users/deactivate/(:any)', 'Users::deactivate/$1');
 
 // ITSO module routes (UI only — no DB actions)
-$routes->get('auth/login', 'Auth::login');
+$routes->post('auth/login', 'Auth::login');
+$routes->get('auth/login', 'Auth::index');
 $routes->get('auth/reset', 'Auth::reset');
 
 $routes->get('equipment', 'Equipment::index');
@@ -52,8 +53,12 @@ $routes->get('itso/users/view/(:any)', 'Users::view/$1');
 $routes->get('itso/users/edit/(:any)', 'Users::edit/$1');
 $routes->get('itso/users/deactivate/(:any)', 'Users::deactivate/$1');
 
-$routes->get('itso/auth/login', 'Auth::login');
+$routes->post('itso/auth/login', 'Auth::login');   
+$routes->get('itso/auth/login', 'Auth::index');    
+$routes->get('itso/auth/index', 'Auth::index');
 $routes->get('itso/auth/reset', 'Auth::reset');
+$routes->get('itso/auth/logout', 'Auth::logout');
+
 
 $routes->get('itso/equipment', 'Equipment::index');
 $routes->get('itso/equipment/add', 'Equipment::add');
@@ -78,6 +83,7 @@ $routes->get('itso/reports/unusableEquipment', 'Reports::unusableEquipment');
 $routes->get('itso/reports/userHistory', 'Reports::userHistory');
 
 $routes->get('itso/about', 'About::index');
+$routes->get('itso/main_view', 'Index::index');
 
 // ...existing routes...
 $routes->get('/products', 'Products::index');
