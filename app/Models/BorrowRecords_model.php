@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class BorrowRecordModel extends Model
+class BorrowRecords_Model extends Model
 {
     protected $table            = 'borrow_records';
     protected $primaryKey       = 'id';
