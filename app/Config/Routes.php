@@ -59,6 +59,8 @@ $routes->get('itso/users/deactivate/(:any)', 'Users::deactivate/$1');
 $routes->post('itso/auth/login', 'Auth::login');   
 $routes->get('itso/auth/login', 'Auth::index');    
 $routes->get('itso/auth/index', 'Auth::index');
+$routes->get('auth/verify/(:any)', 'Users::verify/$1');
+$routes->get('itso/auth/verify/(:any)', 'Users::verify/$1');
 $routes->get('itso/auth/reset', 'Auth::reset');
 $routes->get('itso/auth/logout', 'Auth::logout');
 
