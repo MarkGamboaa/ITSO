@@ -7,13 +7,12 @@ class Equipment extends BaseController
     protected function auth()
     {
         $session = session();
-        if (!$session->get('isLoggedIn')) {
+        if (! $session->get('isLoggedIn') || $session->get('role') !== 'ITSO') {
             return redirect()->to(base_url('auth/login'));
         }
         return null;
 
     }
-
     public function index()
     {
         $check = $this->auth();
