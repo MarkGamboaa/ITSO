@@ -48,8 +48,8 @@ class Auth extends BaseController
         if ($passwordOk) {
             $session->set([
                 'user_id'    => $auser['user_id'] ?? 0,
-                'username'   => $auser['username'] ?? '',
                 'email'      => $auser['email'] ?? '',
+                'role'       => $auser['role'] ?? '',
                 'isLoggedIn' => true,
             ]);
             // redirect to the app home (Index::index) 
