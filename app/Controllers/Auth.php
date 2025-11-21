@@ -24,33 +24,35 @@ class Auth extends BaseController
         $email = strtolower(trim($this->request->getPost('email')));
         $password = $this->request->getPost('password');
 
-        // instantiate model using full namespace (more reliable)
-        $adminModel = model('Admin_model');
-        $auser = $adminModel->where('email', $email)->first();
+        $usersModel = model('Users_model');
+        $auser = $usersModel->where('email', $email)->first();
 
-        if (empty($auser) || strcasecmp($auser['role'] ?? '', 'ITSO') !== 0) {
-        $session->setFlashdata('msg', 'Only ITSO personnel can login.');
+        if(empty($email) || empty($password)) {
+            $session->setFlashdata('msg', 'Email and Password are required.');
             return redirect()->to(base_url('auth/login'));
         }
-        $stored = $auser['password'] ?? '';
+
+        if (empty($auser) || strcasecmp($auser['role'] ?? '', 'ITSO') !== 0) {
+            $session->setFlashdata('msg', 'Only ITSO personnel can login.');
+            return redirect()->to(base_url('auth/login'));
+        }
+        $stored = $auser['password_hash'] ?? '';
 
         // Support hashed passwords (recommended) or plain-text fallback
         $passwordOk = false;
         if (! empty($stored) && password_verify($password, $stored)) {
             $passwordOk = true;
-        } elseif ($password === $stored) {
-            $passwordOk = true; // fallback if DB holds plain text (not recommended)
         }
 
         
         if ($passwordOk) {
             $session->set([
-                'user_id'    => $auser['id'] ?? 0,
+                'user_id'    => $auser['user_id'] ?? 0,
                 'username'   => $auser['username'] ?? '',
                 'email'      => $auser['email'] ?? '',
                 'isLoggedIn' => true,
             ]);
-            // redirect to the app home (Index::index) which enforces auth()
+            // redirect to the app home (Index::index) 
             return redirect()->to(base_url('/'));
         }
 
