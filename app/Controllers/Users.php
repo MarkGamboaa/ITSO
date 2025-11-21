@@ -51,6 +51,69 @@ class Users extends BaseController {
             .view('include/foot_view');
     }
 
+    public function insert(){
+        $usermodel = model('Users_model');
+        $session = session();
+
+        $validation = service('validation');
+
+        $data = array (
+            'first_name'    => $this->request->getPost('first_name'),
+            'last_name'     => $this->request->getPost('last_name'),
+            'email'         => strtolower(trim($this->request->getPost('email'))),
+            'role'          => $this->request->getPost('role'),
+        );
+
+        if (! $validation->run($data, 'userAdd')) {
+            $data = array(
+                'title' => 'Register User',
+            );
+
+            $session->setFlashdata('errors', $validation->getErrors());
+            return redirect()->to(base_url('users/register')); 
+        }
+        $data_insert = array(
+            'first_name'    => $data['first_name'],
+            'last_name'     => $data['last_name'],
+            'email'         => $data['email'],
+            'role'          => $data['role'],
+            'token'         => bin2hex(random_bytes(16))
+        );
+
+        $message = "<h2>Hello, ".$data['first_name']."</h2><br>
+        <p>Your account has been created</p><a href='".base_url()."/auth/verify/".$data_insert['token']."'>Click here to verify your email</a>";
+        $email = service('email');
+        $email->setTo($data['email']);
+        $email->setSubject('Account Registration - Verify your email');
+        $email->setMessage($message);
+        if(!$email->send()){
+            $session->setFlashdata('msg', 'Failed to send verification email. Please try again.');
+            return redirect()->to(base_url('users/register')); 
+        }
+        $usermodel->insert($data_insert);
+        $session->setFlashdata('msg', 'User registered successfully. Check email to verify account.');
+        return redirect()->to(base_url('users')); 
+    }
+
+    public function verify($token){
+        $usermodel = model('Users_model');
+        $session = session();
+
+        $user = $usermodel->where('token', $token)->first();
+        if($user){
+            $data_update = array(
+                'email_verified' => 1,
+                'is_active'      => 1,
+                'token'          => null
+            );
+            $usermodel->update($user['user_id'], $data_update);
+            $session->setFlashdata('msg', 'Email verified successfully. You can now login.');
+            return redirect()->to(base_url('auth/login')); 
+        }
+    }
+
+
+
     public function view($id = null)
     {
         $check = $this->auth();
