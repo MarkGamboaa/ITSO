@@ -32,7 +32,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="small-muted">Total Users</div>
-                            <div class="stat-value">1</div>
+                            <div class="stat-value" ><?= $totalUsers ?></div>
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="small-muted">Active Borrowings</div>
-                            <div class="stat-value">1</div>
+                            <div class="stat-value" ><?= $totalBorrowed ?></div>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="small-muted">Total Equipment</div>
-                            <div class="stat-value">1</div>
+                            <div class="stat-value" ><?= $totalEquipment ?></div>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="small-muted">Pending Reservations</div>
-                            <div class="stat-value">1</div>
+                            <div class="stat-value" ><?= $totalReservations ?></div>
                         </div>
                     </div>
                 </div>
