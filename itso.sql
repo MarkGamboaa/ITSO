@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2025 at 05:46 AM
+-- Generation Time: Nov 21, 2025 at 07:02 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,56 +18,156 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tw32`
+-- Database: `itso`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tblusers`
+-- Table structure for table `borrow_records`
 --
 
-CREATE TABLE `tblusers` (
+CREATE TABLE `borrow_records` (
   `id` int(11) NOT NULL,
-  `profile_pic` varchar(255) DEFAULT NULL,
-  `username` varchar(25) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `fullname` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `datecreated` datetime NOT NULL DEFAULT current_timestamp(),
-  `token` varchar(255) NOT NULL,
-  `isverified` int(11) NOT NULL DEFAULT 0
+  `user_id` int(11) NOT NULL,
+  `equipment_id` int(11) NOT NULL,
+  `borrowed_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `returned_at` datetime DEFAULT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'borrowed'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `tblusers`
+-- Table structure for table `equipment`
 --
 
-INSERT INTO `tblusers` (`id`, `profile_pic`, `username`, `password`, `fullname`, `email`, `datecreated`, `token`, `isverified`) VALUES
-(1, NULL, 'admin', 'password', 'Joseph Calleja', 'admin@tw32.com', '2025-10-04 11:24:12', '', 0),
-(2, NULL, 'user', 'password', 'User User', 'user@tw32.com', '2025-10-04 11:24:12', '', 0),
-(4, NULL, 'admin2', 'password', 'Another Admin', 'admin2@tw32.com', '2025-11-15 11:17:37', '', 0),
-(8, NULL, 'administrator1', '$2y$10$D8mbYPoGetuK2wcKh6J2vOaOBVSy/sANelBBJxPqYCx1zczIZ0IS2', 'Jose Rizal', 'herogap419@gusronk.com', '2025-11-15 12:25:58', 'fe148f8dbb761288142bfe21e50a68f9', 1);
+CREATE TABLE `equipment` (
+  `equipment_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `accessories` text DEFAULT NULL,
+  `total_count` int(11) NOT NULL DEFAULT 0,
+  `available_count` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservations`
+--
+
+CREATE TABLE `reservations` (
+  `reservation_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `equipment_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `reserved_date` date NOT NULL,
+  `status` enum('Active','Cancelled','Completed') DEFAULT 'Active',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `role` enum('ITSO','Associate','Student') NOT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `email_verified` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `tblusers`
+-- Indexes for table `borrow_records`
 --
-ALTER TABLE `tblusers`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `borrow_records`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_borrow_user` (`user_id`),
+  ADD KEY `fk_borrow_equipment` (`equipment_id`);
+
+--
+-- Indexes for table `equipment`
+--
+ALTER TABLE `equipment`
+  ADD PRIMARY KEY (`equipment_id`);
+
+--
+-- Indexes for table `reservations`
+--
+ALTER TABLE `reservations`
+  ADD PRIMARY KEY (`reservation_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `equipment_id` (`equipment_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `tblusers`
+-- AUTO_INCREMENT for table `borrow_records`
 --
-ALTER TABLE `tblusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `borrow_records`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `equipment`
+--
+ALTER TABLE `equipment`
+  MODIFY `equipment_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `reservations`
+--
+ALTER TABLE `reservations`
+  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `borrow_records`
+--
+ALTER TABLE `borrow_records`
+  ADD CONSTRAINT `fk_borrow_equipment` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`equipment_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_borrow_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `reservations`
+--
+ALTER TABLE `reservations`
+  ADD CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`equipment_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
