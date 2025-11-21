@@ -6,7 +6,7 @@ class Users extends BaseController {
     protected function auth()
     {
         $session = session();
-        if (!$session->get('isLoggedIn')) {
+        if (! $session->get('isLoggedIn') || $session->get('role') !== 'ITSO') {
             return redirect()->to(base_url('auth/login'));
         }
         return null;
@@ -103,24 +103,26 @@ class Users extends BaseController {
         if($user){
             $data_update = array(
                 'email_verified' => 1,
-                'is_active'      => 1,
                 'token'          => null
             );
             $usermodel->update($user['user_id'], $data_update);
             $session->setFlashdata('msg', 'Email verified successfully. You can now login.');
-            return redirect()->to(base_url('auth/login')); 
+            return redirect()->to(base_url('about/')); 
         }
     }
 
 
 
-    public function view($id = null)
+    public function view($user_id = null)
     {
         $check = $this->auth();
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'View User', 'id' => $id];
+        $usermodel = model('Users_model');
+        $data = ['title' => 'View User', 
+                'user'=>$usermodel->find($user_id)
+        ];
 
         return view('include/head_view', $data)
             .view('include/nav_view')
