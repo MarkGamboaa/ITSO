@@ -16,9 +16,18 @@ class Index extends BaseController {
         if ($check !== null) {
             return $check;
         }
+        $session = session();
+        $usermodel = model('Users_Model');
+        $equipmentmodel = model('Equipment_Model');
+        $borrowmodel = model('BorrowRecords_Model');
+        $reservationmodel = model('Reservations_Model');
         
         $data = array(
             'title' => 'ITSO - DASHBOARD',
+            'totalUsers' => $usermodel->countAllResults(),
+            'totalEquipment' => $equipmentmodel->countAllResults(),
+            'totalBorrowed' => $borrowmodel->where('status', 'borrowed')->countAllResults(),
+            'totalReservations' => $reservationmodel->where('status', 'Active')->countAllResults(),
         );
 
         return view('include/head_view', $data)
