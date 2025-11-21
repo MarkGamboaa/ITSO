@@ -15,14 +15,14 @@
             <tbody>
                 <?php foreach($users as $user): ?>
                 <tr>
-                    <td><?= $user['id'] ?></td>
-                    <td><?= $user['fullname'] ?></td>
+                    <td><?= $user['user_id'] ?></td>
+                    <td><?= $user['last_name'] ?></td>
                     <td><?= $user['role'] ?></td>
-                    <td><?= $user['status'] ?></td>
+                    <td><?= $user['is_active'] ?></td>
                     <td>
-                        <a class="btn btn-sm btn-primary" href="<?= base_url('users/view/' . $user['id']) ?>">View</a> 
-                        <a class="btn btn-sm btn-secondary" href="<?= base_url('users/edit/' . $user['id']) ?>">Edit</a>
-                        <a class="btn btn-sm btn-danger" href="<?= base_url('users/deactivate/' . $user['id']) ?>">Deactivate</a>
+                        <a class="btn btn-sm btn-primary" href="<?= base_url('users/view/' . $user['user_id']) ?>">View</a> 
+                        <a class="btn btn-sm btn-secondary" href="<?= base_url('users/edit/' . $user['user_id']) ?>">Edit</a>
+                        <a class="btn btn-sm btn-danger" href="<?= base_url('users/deactivate/' . $user['user_id']) ?>">Deactivate</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
