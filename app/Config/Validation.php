@@ -41,4 +41,12 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+
+    // for adding user
+    public array $userAdd = [
+        'first_name' => 'required|min_length[2]',
+        'last_name'  => 'required|min_length[2]',
+        'email'      => 'required|valid_email|is_unique[users.email,user_id,{user_id}]',
+        'role' => 'required|in_list[ITSO,Associate,Student]'
+    ];
 }
