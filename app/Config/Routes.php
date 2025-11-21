@@ -16,6 +16,7 @@ $routes->get('users/register', 'Users::register');
 $routes->post('users/register', 'Users::insert');
 $routes->get('users/view/(:any)', 'Users::view/$1');
 $routes->get('users/edit/(:any)', 'Users::edit/$1');
+$routes->post('users/update/(:any)', 'Users::update/$1');
 $routes->get('users/deactivate/(:any)', 'Users::deactivate/$1');
 
 // ITSO module routes (UI only — no DB actions)
@@ -49,6 +50,7 @@ $routes->get('about', 'About::index');
 
 // 'itso/' aliases for compatibility
 $routes->get('itso/users', 'Users::index');
+$routes->post('itso/users/update/(:any)', 'Users::update/$1');
 $routes->get('itso/users/register', 'Users::register');
 $routes->post('itso/users/register', 'Users::insert');
 $routes->post('itso/users/insert', 'Users::insert');
