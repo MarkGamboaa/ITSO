@@ -52,47 +52,46 @@ class Users extends BaseController {
     }
 
     public function insert(){
-        $usermodel = model('Users_model');
-        $session = session();
+    $usermodel = model('Users_model');
+    $session = session();
+    $validation = service('validation');
 
-        $validation = service('validation');
+    $data = array (
+        'first_name' => $this->request->getPost('first_name'),
+        'last_name'  => $this->request->getPost('last_name'),
+        'email'      => strtolower(trim($this->request->getPost('email'))),
+        'role'       => $this->request->getPost('role'),
+    );
 
-        $data = array (
-            'first_name'    => $this->request->getPost('first_name'),
-            'last_name'     => $this->request->getPost('last_name'),
-            'email'         => strtolower(trim($this->request->getPost('email'))),
-            'role'          => $this->request->getPost('role'),
-        );
+    if (!$validation->run($data, 'user')) {
+        $session->setFlashdata('errors', $validation->getErrors());
+        return redirect()->to(base_url('users/register'))->withInput(); 
+    }
 
-        if (! $validation->run($data, 'userAdd')) {
-            $data = array(
-                'title' => 'Register User',
-            );
+    $data_insert = array(
+        'first_name' => $data['first_name'],
+        'last_name'  => $data['last_name'],
+        'email'      => $data['email'],
+        'role'       => $data['role'],
+        'token'      => bin2hex(random_bytes(16))
+    );
 
-            $session->setFlashdata('errors', $validation->getErrors());
-            return redirect()->to(base_url('users/register')); 
-        }
-        $data_insert = array(
-            'first_name'    => $data['first_name'],
-            'last_name'     => $data['last_name'],
-            'email'         => $data['email'],
-            'role'          => $data['role'],
-            'token'         => bin2hex(random_bytes(16))
-        );
-
-        $message = "<h2>Hello, ".$data['first_name']."</h2><br>
-        <p>Your account has been created</p><a href='".base_url()."/auth/verify/".$data_insert['token']."'>Click here to verify your email</a>";
-        $email = service('email');
-        $email->setTo($data['email']);
-        $email->setSubject('Account Registration - Verify your email');
-        $email->setMessage($message);
-        if(!$email->send()){
-            $session->setFlashdata('msg', 'Failed to send verification email. Please try again.');
-            return redirect()->to(base_url('users/register')); 
-        }
-        $usermodel->insert($data_insert);
-        $session->setFlashdata('msg', 'User registered successfully. Check email to verify account.');
-        return redirect()->to(base_url('users')); 
+    $message = "<h2>Hello, ".$data['first_name']."</h2><br>
+    <p>Your account has been created</p><a href='".base_url()."/auth/verify/".$data_insert['token']."'>Click here to verify your email</a>";
+    
+    $email = service('email');
+    $email->setTo($data['email']);
+    $email->setSubject('Account Registration - Verify your email');
+    $email->setMessage($message);
+    
+    if(!$email->send()){
+        $session->setFlashdata('msg', 'Failed to send verification email. Please try again.');
+        return redirect()->to(base_url('users/register')); 
+    }
+    
+    $usermodel->insert($data_insert);
+    $session->setFlashdata('msg', 'User registered successfully. Check email to verify account.');
+    return redirect()->to(base_url('users')); 
     }
 
     public function verify($token){
@@ -120,9 +119,10 @@ class Users extends BaseController {
             return $check;
         }
         $usermodel = model('Users_model');
-        $data = ['title' => 'View User', 
+        $data = array (
+                'title' => 'View User', 
                 'user'=>$usermodel->find($user_id)
-        ];
+            );
 
         return view('include/head_view', $data)
             .view('include/nav_view')
@@ -130,18 +130,74 @@ class Users extends BaseController {
             .view('include/foot_view');
     }
 
-    public function edit($id = null)
+    public function edit($user_id = null)
     {
         $check = $this->auth();
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'Edit User', 'id' => $id];
+        $usermodel = model('Users_model');
+        $session = session();
+        $data = ['title' => 'Edit User', 
+                'user' => $usermodel->find($user_id),];
 
         return view('include/head_view', $data)
             .view('include/nav_view')
             .view('ITSO/users/users_edit_view', $data)
             .view('include/foot_view');
+    }
+
+    public function update($user_id = null)
+    {   
+    $check = $this->auth();
+    if ($check !== null) {
+        return $check;
+    }
+
+    $usermodel = model('Users_model');
+    $session = session();
+    $validation = service('validation');
+
+    $currentUser = $usermodel->find($user_id);
+    
+    if (!$currentUser) {
+        $session->setFlashdata('errors', ['User not found']);
+        return redirect()->to(base_url('users/')); 
+    }
+
+    $data = array (
+        'first_name'    => $this->request->getPost('first_name'),
+        'last_name'     => $this->request->getPost('last_name'),
+        'email'         => strtolower(trim($this->request->getPost('email'))),
+        'role'          => $this->request->getPost('role')
+    );
+
+    // Check if email has changed to determine which validation group to use
+    if ($data['email'] !== strtolower(trim($currentUser['email']))) {
+        // Email changed, check uniqueness
+        if (!$validation->run($data, 'user')) {
+            $session->setFlashdata('errors', $validation->getErrors());
+            return redirect()->to(base_url('users/edit/' . $user_id)); 
+        }
+    } else {
+        // Email unchanged, use update validation
+        if (!$validation->run($data, 'user_update')) {
+            $session->setFlashdata('errors', $validation->getErrors());
+            return redirect()->to(base_url('users/edit/' . $user_id)); 
+        }
+    }
+    
+    $usermodel->setValidationRules([]);
+    
+    $result = $usermodel->update($user_id, $data);
+    
+    if ($result) {
+        $session->setFlashdata('msg', 'User updated successfully.');
+    } else {
+        $session->setFlashdata('errors', ['Failed to update user']);
+    }
+    
+    return redirect()->to(base_url('users/')); 
     }
 
     public function deactivate($id = null)
