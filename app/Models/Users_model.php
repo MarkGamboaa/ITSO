@@ -20,6 +20,7 @@ class Users_model extends Model
         'email',
         'password_hash',
         'role',
+        'token',
         'is_active',
         'email_verified',
         'created_at',
@@ -36,7 +37,6 @@ class Users_model extends Model
         'first_name' => 'required|min_length[2]',
         'last_name'  => 'required|min_length[2]',
         'email'      => 'required|valid_email|is_unique[users.email,user_id,{user_id}]',
-        'password_hash' => 'required|min_length[6]',
         'role' => 'required|in_list[ITSO,Associate,Student]'
     ];
 }
