@@ -82,4 +82,28 @@ class Equipment extends BaseController
             .view('ITSO/equipment/deactivate_equipment_view', $data)
             .view('include/foot_view');
     }
+    public function insert(){
+        $equipmentmodel = model('Equipment_model');
+        $session = session();
+        $validation = service('validation');
+
+    $data = array (
+        'name'    => $this->request->getPost('name'),
+        'total_count'   => $this->request->getPost('count'),
+        'available_count'   => $this->request->getPost('count'),
+        'accessories'   => $this->request->getPost('accessories') ?? '',
+        'is_active'       => 1,
+    );
+
+    if (!$validation->run($data, 'equipment')) {
+        $session->setFlashdata('errors', $validation->getErrors());
+        return redirect()->to(base_url('equipment/add'))->withInput();
+    }
+
+    $equipmentmodel->insert($data);
+
+    $session->setFlashdata('msg', 'Equipment added successfully');
+    return redirect()->to(base_url('equipment'));
+
+         }
 }
