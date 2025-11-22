@@ -63,4 +63,14 @@ class Validation extends BaseConfig
         'quantity'      => 'required|integer|greater_than[0]',
         'reserved_date' => 'required|valid_date',
     ];
+
+    public array $equipment = [
+    'name'            => 'required|min_length[2]',
+    'total_count'     => 'required|integer|greater_than[0]',
+    'available_count' => 'required|integer|greater_than_equal_to[0]',
+    'is_active'       => 'in_list[0,1]',
+    'accessories'     => 'permit_empty|string'
+];
+
+    
 }
