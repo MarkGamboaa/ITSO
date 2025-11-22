@@ -27,7 +27,7 @@ class Users extends BaseController {
 
         $data = array (
             'title' => 'Users List',
-            'users' => $usermodel->paginate(3),
+            'users' => $usermodel->where('email_verified', 1)->paginate(10),
             'pager' => $usermodel->pager
         );
         $usermodel->pager->setPath('users');

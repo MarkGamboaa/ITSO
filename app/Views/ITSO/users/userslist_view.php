@@ -18,7 +18,7 @@
                     <td><?= $user['user_id'] ?></td>
                     <td><?= $user['last_name'] ?></td>
                     <td><?= $user['role'] ?></td>
-                    <td><?= $user['is_active'] ?></td>
+                    <td><?= $user['is_active'] == 1 ? 'Active' : 'Deactivated' ?></td>
                     <td>
                         <a class="btn btn-sm btn-primary" href="<?= base_url('users/view/' . $user['user_id']) ?>">View</a> 
                         <a class="btn btn-sm btn-secondary" href="<?= base_url('users/edit/' . $user['user_id']) ?>">Edit</a>
