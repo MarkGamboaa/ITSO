@@ -19,8 +19,14 @@ class Equipment extends BaseController
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'Equipment'];
-
+        $equipmentModel = model('Equipment_model'); 
+        $equipment = $equipmentModel->findAll();    
+        
+        $data = [
+            'title' => 'Equipment',
+            'equipment' => $equipment
+        ];
+        
         return view('include/head_view', $data)
             .view('include/nav_view')
             .view('ITSO/equipment/equipment_table_view', $data)
