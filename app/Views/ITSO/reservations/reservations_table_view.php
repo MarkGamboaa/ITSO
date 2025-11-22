@@ -6,7 +6,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Ref</th>
+                    <th>User ID</th>
                     <th>User</th>
                     <th>Item</th>
                     <th>Reserved Date</th>
@@ -14,14 +14,17 @@
                 </tr>
             </thead>
             <tbody>
+                <?php foreach($reservations as $reservation): ?>
                 <tr>
-                    <td>RS-001</td>
-                    <td>JayCee</td>
-                    <td>Laptop (EQ-002)</td>
-                    <td>2025-11-17</td>
-                    <td>Reserved</td>
+                    <td><?= $reservation['user_id'] ?></td>
+                    <td><?= $reservation['user_name'] ?></td>
+                    <td><?= $reservation['equipment_name'] ?></td>
+                    <td><?= date('Y-m-d', strtotime($reservation['updated_at'])) ?></td>
+                    <td><?= $reservation['status'] ?></td>
                 </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
+        <?= $pager->links(); ?>
     </div>
 </main>

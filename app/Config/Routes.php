@@ -39,6 +39,7 @@ $routes->get('returns/process', 'Returns::process');
 
 $routes->get('reservations', 'Reservations::index');
 $routes->get('reservations/reserve', 'Reservations::reserve');
+$routes->post('reservations/reserve', 'Reservations::reserve');
 $routes->get('reservations/manage', 'Reservations::manage');
 
 $routes->get('reports', 'Reports::index');
@@ -82,6 +83,8 @@ $routes->get('itso/returns/process', 'Returns::process');
 
 $routes->get('itso/reservations', 'Reservations::index');
 $routes->get('itso/reservations/reserve', 'Reservations::reserve');
+$routes->post('itso/reservations/reserve', 'Reservations::reserve');
+$routes->post('itso/reservations/insert', 'Reservations::insert');
 $routes->get('itso/reservations/manage', 'Reservations::manage');
 
 $routes->get('itso/reports', 'Reports::index');

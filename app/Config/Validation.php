@@ -57,4 +57,10 @@ class Validation extends BaseConfig
         'role'       => 'required|in_list[ITSO,Associate,Student]'
     ];
 
+    public array $reservation = [
+        'email'         => 'required|valid_email|',
+        'equipment_id'  => 'required|integer|is_not_unique[equipment.equipment_id]',
+        'quantity'      => 'required|integer|greater_than[0]',
+        'reserved_date' => 'required|valid_date',
+    ];
 }

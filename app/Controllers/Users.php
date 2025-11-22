@@ -20,10 +20,7 @@ class Users extends BaseController {
         }
 
         // load model and fetch users
-        $usermodel = model('Users_model');
-
-        // normalize fields expected by the view
-        
+        $usermodel = model('Users_model');        
 
         $data = array (
             'title' => 'Users List',

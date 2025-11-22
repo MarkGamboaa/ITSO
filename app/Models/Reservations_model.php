@@ -25,12 +25,4 @@ class Reservations_Model extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-
-    protected $validationRules = [
-        'user_id'      => 'required|integer',
-        'equipment_id' => 'required|integer',
-        'quantity'     => 'required|integer',
-        'reserved_date' => 'required|valid_date',
-        'status'       => 'required|in_list[Active,Cancelled,Completed]'
-    ];
 }
