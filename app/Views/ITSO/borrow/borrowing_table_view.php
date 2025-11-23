@@ -9,22 +9,27 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Ref</th>
+                    <th>User ID</th>
                     <th>User</th>
                     <th>Item</th>
+                    <th>Accessories</th>
+                    <th>Quantity</th>
                     <th>Date Borrowed</th>
-                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
+                <?php foreach ($borrowing as $borrow): ?>
                 <tr>
-                    <td>BR-001</td>
-                    <td>Marlon Viluz</td>
-                    <td>Laptop (EQ-001)</td>
-                    <td>2025-11-15</td>
-                    <td>Borrowed</td>
+                    <td><?= $borrow['user_id'] ?></td>
+                    <td><?= $borrow['user_name'] ?></td>
+                    <td><?= $borrow['equipment_name'] ?></td>
+                    <td><?= $borrow['accessories'] ?></td>
+                    <td><?= $borrow['borrow_quantity'] ?></td>
+                    <td><?= date('Y-m-d', strtotime($borrow['borrowed_at'])) ?></td>
                 </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
+        <?= $pager->links(); ?>
     </div>
 </main>
