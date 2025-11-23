@@ -57,9 +57,10 @@ class Reservations extends BaseController
         
         $reservationsmodel = model('Reservations_model');
         $usersmodel = model('Users_model');
+        $equipmentmodel = model('Equipment_model');
         $session = session();
         $validation = service('validation');
-        
+
         $data = array(
             'email' => strtolower(trim($this->request->getPost('email'))),
             'equipment_id' => $this->request->getPost('equipment_id'),
@@ -95,6 +96,14 @@ class Reservations extends BaseController
         $userEmail = $data['email'];
         $data['user_id'] = $user['user_id'];
         unset($data['email']);
+        $equipment = $equipmentmodel->find($data['equipment_id']);
+        if (!$equipment || $equipment['available_count'] < $data['quantity']) {
+            $session->setFlashdata('errors', ['quantity' => "Not enough equipment available. Only {$equipment['available_count']} left in stock."]);
+            return redirect()->to(base_url('reservations/reserve'))->withInput();
+        }
+        $equipmentmodel->update($data['equipment_id'], [
+            'available_count' => $equipment['available_count'] - $data['quantity']
+        ]);
 
         $reservationsmodel->insert($data);
 
