@@ -17,7 +17,6 @@
             <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" name="email" id="email" value="<?= esc($user['email']) ?>" /></div>
             <div class="mb-3"><label class="form-label">Role</label>
                 <select class="form-select" name="role" id="role">
-                    <option value="ITSO" <?= $user['role'] == 'ITSO' ? 'selected' : '' ?>>ITSO</option>
                     <option value="Associate" <?= $user['role'] == 'Associate' ? 'selected' : '' ?>>Associate</option>
                     <option value="Student" <?= $user['role'] == 'Student' ? 'selected' : '' ?>>Student</option>
                 </select>
