@@ -85,7 +85,7 @@ class Users extends BaseController {
         $session->setFlashdata('msg', 'Failed to send verification email. Please try again.');
         return redirect()->to(base_url('users/register')); 
     }
-    
+        
     $usermodel->insert($data_insert);
     $session->setFlashdata('msg', 'User registered successfully. Check email to verify account.');
     return redirect()->to(base_url('users')); 
