@@ -18,11 +18,15 @@ $routes->get('users/view/(:any)', 'Users::view/$1');
 $routes->get('users/edit/(:any)', 'Users::edit/$1');
 $routes->post('users/update/(:any)', 'Users::update/$1');
 $routes->get('users/deactivate/(:any)', 'Users::deactivate/$1');
-
+$routes->post('users/confirmDeactivate/(:any)', 'Users::confirmDeactivate/$1');
 // ITSO module routes (UI only — no DB actions)
 $routes->post('auth/login', 'Auth::login');
 $routes->get('auth/login', 'Auth::index');
 $routes->get('auth/reset', 'Auth::reset');
+$routes->post('auth/send_reset_link', 'Auth::send_reset_link');
+$routes->get('auth/reset_password_form', 'Auth::reset_password_form');
+$routes->post('auth/update_password', 'Auth::update_password');
+$routes->get('auth/logout', 'Auth::logout');
 
 $routes->get('equipment', 'Equipment::index');
 $routes->get('equipment/add', 'Equipment::add');
@@ -41,6 +45,7 @@ $routes->get('returns/process', 'Returns::process');
 $routes->get('reservations', 'Reservations::index');
 $routes->get('reservations/reserve', 'Reservations::reserve');
 $routes->post('reservations/reserve', 'Reservations::reserve');
+$routes->get('reservations/confirm/(:any)', 'Reservations::confirm/$1');
 $routes->get('reservations/manage', 'Reservations::manage');
 
 $routes->get('reports', 'Reports::index');
@@ -59,6 +64,7 @@ $routes->post('itso/users/insert', 'Users::insert');
 $routes->get('itso/users/view/(:any)', 'Users::view/$1');
 $routes->get('itso/users/edit/(:any)', 'Users::edit/$1');
 $routes->get('itso/users/deactivate/(:any)', 'Users::deactivate/$1');
+$routes->post('itso/users/confirmDeactivate/(:any)', 'Users::confirmDeactivate/$1');
 
 $routes->post('itso/auth/login', 'Auth::login');   
 $routes->get('itso/auth/login', 'Auth::index');    
@@ -66,6 +72,10 @@ $routes->get('itso/auth/index', 'Auth::index');
 $routes->get('auth/verify/(:any)', 'Users::verify/$1');
 $routes->get('itso/auth/verify/(:any)', 'Users::verify/$1');
 $routes->get('itso/auth/reset', 'Auth::reset');
+$routes->post('itso/auth/reset', 'Auth::reset');
+$routes->post('itso/auth/send_reset_link', 'Auth::send_reset_link');
+$routes->get('itso/auth/reset_password_form', 'Auth::reset_password_form');
+$routes->post('itso/auth/update_password', 'Auth::update_password');
 $routes->get('itso/auth/logout', 'Auth::logout');
 
 
@@ -79,6 +89,7 @@ $routes->get('itso/equipment/deactivate/(:any)', 'Equipment::deactivate/$1');
 $routes->get('itso/borrowing', 'Borrowing::index');
 $routes->get('itso/borrowing/borrow', 'Borrowing::borrow');
 $routes->get('itso/borrowing/history', 'Borrowing::history');
+$routes->post('itso/borrowing/insert', 'Borrowing::insert');
 
 $routes->get('itso/returns', 'Returns::index');
 $routes->get('itso/returns/process', 'Returns::process');
@@ -87,6 +98,7 @@ $routes->get('itso/reservations', 'Reservations::index');
 $routes->get('itso/reservations/reserve', 'Reservations::reserve');
 $routes->post('itso/reservations/reserve', 'Reservations::reserve');
 $routes->post('itso/reservations/insert', 'Reservations::insert');
+$routes->get('itso/reservations/confirm/(:any)', 'Reservations::confirm/$1');
 $routes->get('itso/reservations/manage', 'Reservations::manage');
 
 $routes->get('itso/reports', 'Reports::index');
