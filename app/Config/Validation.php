@@ -63,4 +63,10 @@ class Validation extends BaseConfig
         'quantity'      => 'required|integer|greater_than[0]',
         'reserved_date' => 'required|valid_date',
     ];
+
+    public array $borrow_rules = [
+        'email'          => 'required|valid_email',
+        'equipment_id'   => 'required|integer|is_not_unique[equipment.equipment_id]',
+        'borrow_quantity'=> 'required|integer|greater_than[0]',
+    ];
 }
