@@ -80,7 +80,11 @@ class Users extends BaseController {
     $email->setTo($data['email']);
     $email->setSubject('Account Registration - Verify your registration');
     $email->setMessage($message);
-    $email->send();
+    
+    if(!$email->send()){
+        $session->setFlashdata('msg', 'Failed to send verification email. Please try again.');
+        return redirect()->to(base_url('users/register')); 
+    }
     
     $usermodel->insert($data_insert);
     return redirect()->to(base_url('users')); 

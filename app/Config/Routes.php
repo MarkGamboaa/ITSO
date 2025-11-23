@@ -28,6 +28,7 @@ $routes->get('equipment', 'Equipment::index');
 $routes->get('equipment/add', 'Equipment::add');
 $routes->get('equipment/edit/(:any)', 'Equipment::edit/$1');
 $routes->get('equipment/view/(:any)', 'Equipment::view/$1');
+$routes->post('equipment/insert', 'Equipment::insert');
 $routes->get('equipment/deactivate/(:any)', 'Equipment::deactivate/$1');
 
 $routes->get('borrowing', 'Borrowing::index');
@@ -72,6 +73,7 @@ $routes->get('itso/equipment', 'Equipment::index');
 $routes->get('itso/equipment/add', 'Equipment::add');
 $routes->get('itso/equipment/edit/(:any)', 'Equipment::edit/$1');
 $routes->get('itso/equipment/view/(:any)', 'Equipment::view/$1');
+$routes->post('itso/equipment/insert', 'Equipment::insert');
 $routes->get('itso/equipment/deactivate/(:any)', 'Equipment::deactivate/$1');
 
 $routes->get('itso/borrowing', 'Borrowing::index');
