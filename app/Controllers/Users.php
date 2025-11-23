@@ -74,12 +74,13 @@ class Users extends BaseController {
     );
 
     $message = "<h2>Hello, ".$data['first_name']."</h2><br>
-    <p>Your account has been created</p><a href='".base_url()."/auth/verify/".$data_insert['token']."'>Click here to verify your eregistration</a>";
+    <p>Your account has been created</p><a href='".base_url()."/auth/verify/".$data_insert['token']."'>Click here to verify your registration</a>";
     
     $email = service('email');
     $email->setTo($data['email']);
     $email->setSubject('Account Registration - Verify your registration');
     $email->setMessage($message);
+    $email->send();
     
     $usermodel->insert($data_insert);
     return redirect()->to(base_url('users')); 
@@ -175,14 +176,7 @@ class Users extends BaseController {
     }
     
     $usermodel->setValidationRules([]);
-    
     $result = $usermodel->update($user_id, $data);
-    
-    if ($result) {
-        $session->setFlashdata('msg', 'User updated successfully.');
-    } else {
-        $session->setFlashdata('errors', ['Failed to update user']);
-    }
     
     return redirect()->to(base_url('users/')); 
     }

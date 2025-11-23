@@ -13,29 +13,30 @@
 
                     <div class="col-md-7 bg-white p-4 d-flex align-items-center h-100">
                         <div class="w-100">
-                            <h2 class="mb-2">Password Reset</h2>
+                            <h2 class="mb-2">Reset Password</h2>
                             <?php if(session('errors')):?>
                             <div class="alert alert-danger">
                                 <p><?= implode('<br>', session('errors')) ?></p>
                             </div>
                             <?php endif;?>
-                            <p class="text-muted small">Enter your email to receive a reset link.</p>
+                            <p class="text-muted small">Enter your new password.</p>
 
-                            <?php if (session()->getFlashdata('msg')): ?>
-                                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                    <?= session()->getFlashdata('msg') ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <form method="post" action="<?= base_url('auth/update_password') ?>">
+                                <input type="hidden" name="email" value="<?= esc($email) ?>">
+                                
+                                <div class="mb-3">
+                                    <label for="new_password" class="form-label">New Password</label>
+                                    <input type="password" name="new_password" id="new_password" class="form-control"/>
                                 </div>
-                            <?php endif; ?>
 
-                            <form method="post" action="<?= base_url('auth/send_reset_link') ?>">
                                 <div class="mb-4">
-                                    <input type="email" name="email" class="form-control" placeholder="E-Mail"/>
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <input type="password" name="confirm_password" id="confirm_password" class="form-control"/>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <a href="<?= base_url('auth/login') ?>" class="btn btn-outline-secondary">&larr; Back</a>
-                                    <button type="submit" class="btn btn-success" style="background:var(--feu-green);border:0">Send Reset Link</button>
+                                    <a href="<?= base_url('auth/login') ?>" class="btn btn-outline-secondary">&larr; Back to Login</a>
+                                    <button type="submit" class="btn btn-success" style="background:var(--feu-green);border:0">Reset Password</button>
                                 </div>
                             </form>
                         </div>

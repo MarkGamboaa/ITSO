@@ -69,20 +69,15 @@ class Reservations extends BaseController
         'status' => 'Active',
         'reservation_token' => bin2hex(random_bytes(16)),
     );
-    // using validation rules
-    if(!$validation->run($data, 'reservation')){
+    
+    // using validation rules with custom error messages
+    $validation->setRules(
+        config('Validation')->reservation,
+        config('Validation')->reservation_errors
+    );
+    
+    if(!$validation->run($data)){
         $session->setFlashdata('errors', $validation->getErrors());
-        return redirect()->to(base_url('reservations/reserve'))->withInput();
-    }
-    // to check if email belongs to an active Associate
-    $user = $usersmodel->where('email', $data['email'])->where('role', 'Associate')->first();
-    if (!$user) {
-        $session->setFlashdata('errors', ['email' => 'Only active Associates can make reservations.']);
-        return redirect()->to(base_url('reservations/reserve'))->withInput();
-    }
-    // to check if user is still active
-    if($user['is_active'] != 1) {
-        $session->setFlashdata('errors', ['email' => 'This user account is not active.']);
         return redirect()->to(base_url('reservations/reserve'))->withInput();
     }
 
@@ -95,8 +90,26 @@ class Reservations extends BaseController
 
     // Prepare data for insertion - replace email with user_id
     $userEmail = $data['email'];
+    $user = $usersmodel->where('email', $userEmail)->first();
+    
+    if (!$user) {
+        $session->setFlashdata('errors', ['email' => 'User not found with this email.']);
+        return redirect()->to(base_url('reservations/reserve'))->withInput();
+    }
+
+    // Check if the specific user is an Associate
+    if ($user['role'] !== 'Associate') {
+        $session->setFlashdata('errors', ['email' => 'Only active Associates can make reservations.']);
+        return redirect()->to(base_url('reservations/reserve'))->withInput();
+    }
+    if ($user['is_active'] != 1) {
+        $session->setFlashdata('errors', ['email' => 'Your account is deactivated. Please contact ITSO for assistance.']);
+        return redirect()->to(base_url('reservations/reserve'))->withInput();
+    }
+    
     $data['user_id'] = $user['user_id'];
     unset($data['email']);
+    
     $equipment = $equipmentmodel->find($data['equipment_id']);
     if (!$equipment || $equipment['available_count'] < $data['quantity']) {
         $session->setFlashdata('errors', ['quantity' => "Only {$equipment['available_count']} left in stock."]);
@@ -117,7 +130,6 @@ class Reservations extends BaseController
     $session->setFlashdata('success', 'Reservation successful. Please check your email to confirm.');
     return redirect()->to(base_url('reservations'));
 }
-
     public function confirm($reservation_token)
     {
     $reservationsmodel = model('Reservations_model');

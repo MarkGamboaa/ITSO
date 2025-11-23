@@ -27,7 +27,7 @@ class Index extends BaseController {
             'totalUsers' => $usermodel->countAllResults(),
             'totalEquipment' => $equipmentmodel->countAllResults(),
             'totalBorrowed' => $borrowmodel->where('returned_at IS NULL', null, false)->countAllResults(false),
-            'totalReservations' => $reservationmodel->where('status', 'Active')->countAllResults(),
+            'totalReservations' => $reservationmodel->where('reservation_confirmation', '1')->countAllResults(),
             'borrowing' => $borrowmodel
                     ->select('borrow_records.*, users.last_name as user_name, equipment.name as equipment_name, equipment.accessories as accessories')
                     ->join('users', 'users.user_id = borrow_records.user_id')

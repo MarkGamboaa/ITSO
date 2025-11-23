@@ -41,7 +41,6 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
-
     // for adding user
     public array $user = [
         'first_name' => 'required|min_length[2]',
@@ -58,15 +57,47 @@ class Validation extends BaseConfig
     ];
 
     public array $reservation = [
-        'email'         => 'required|valid_email|',
+        'email'         => 'required|valid_email',
         'equipment_id'  => 'required|integer|is_not_unique[equipment.equipment_id]',
-        'quantity'      => 'required|integer|greater_than[0]',
-        'reserved_date' => 'required|valid_date',
+        'quantity'      => 'required|integer|greater_than[0]'
+    ];
+
+    public array $reservation_errors = [
+        'email' => [
+            'required' => 'Email is required.',
+            'valid_email' => 'Please provide a valid email address.'
+        ],
+        'equipment_id' => [
+            'required' => 'Equipment selection is required.',
+            'is_not_unique' => 'Invalid equipment selected.'
+        ],
+        'quantity' => [
+            'required' => 'Quantity is required.',
+            'greater_than' => 'Quantity must be greater than 0.'
+        ]
     ];
 
     public array $borrow_rules = [
         'email'          => 'required|valid_email',
         'equipment_id'   => 'required|integer|is_not_unique[equipment.equipment_id]',
         'borrow_quantity'=> 'required|integer|greater_than[0]',
+    ];
+
+    public array $password_reset = [
+        'new_password' => 'required|min_length[8]|max_length[255]|regex_match[/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/]',
+        'confirm_password' => 'required|matches[new_password]'
+    ];
+
+    public array $password_reset_errors = [
+        'new_password' => [
+            'required' => 'Password is required.',
+            'min_length' => 'Password must be at least 8 characters long.',
+            'max_length' => 'Password cannot exceed 255 characters.',
+            'regex_match' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&#).'
+        ],
+        'confirm_password' => [
+            'required' => 'Please confirm your password.',
+            'matches' => 'Passwords do not match.'
+        ]
     ];
 }
