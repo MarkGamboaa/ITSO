@@ -16,6 +16,7 @@ class BorrowRecords_Model extends Model
     protected $allowedFields    = [
         'user_id',
         'equipment_id',
+        'borrow_quantity',
         'borrowed_at',
         'returned_at',
         'status'

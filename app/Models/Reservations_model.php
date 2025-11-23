@@ -18,8 +18,8 @@ class Reservations_Model extends Model
         'quantity',
         'reserved_date',
         'status',
-        'created_at',
-        'updated_at'
+        'reservation_token',
+        'reservation_confirmation'
     ];
 
     protected $useTimestamps = true;

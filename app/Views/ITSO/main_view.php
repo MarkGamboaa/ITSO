@@ -73,38 +73,24 @@
                     <div class="table-responsive">
                         <table class="table table-sm recent-table">
                             <thead>
-                                <tr><th>Ref</th><th>Type</th><th>User</th><th>Item</th><th>Date</th><th>Status</th></tr>
+                                <tr><th>User ID</th><th>Type</th><th>User</th><th>Item</th><th>Date</th><th>Status</th></tr>
                             </thead>
                             <tbody>
+                                <?php foreach($borrowing as $borrow): ?>
                                 <tr>
-                                    <td><a href="<?= base_url('borrowing/history') ?>">BR-001</a></td>
+                                    <td><?= $borrow['user_id'] ?></td>
                                     <td>Borrow</td>
-                                    <td>Juan Dela Cruz</td>
-                                    <td>Laptop (EQ-001)</td>
-                                    <td>2025-11-15</td>
+                                    <td><?= $borrow['user_name'] ?></td>
+                                    <td><?= $borrow['equipment_name'] ?></td>
+                                    <td><?= $borrow['borrowed_at'] ?></td>
                                     <td><span class="badge bg-success">Borrowed</span></td>
                                 </tr>
-                                <tr>
-                                    <td><a href="<?= base_url('returns/process') ?>">RT-002</a></td>
-                                    <td>Return</td>
-                                    <td>Anna Santos</td>
-                                    <td>Projector (EQ-012)</td>
-                                    <td>2025-11-14</td>
-                                    <td><span class="badge bg-warning">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td><a href="<?= base_url('reservations') ?>">RSV-001</a></td>
-                                    <td>Reservation</td>
-                                    <td>Mark Lee</td>
-                                    <td>DLP (EQ-021)</td>
-                                    <td>2025-11-20</td>
-                                    <td><span class="badge bg-info text-dark">Reserved</span></td>
-                                </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
                     <div class="card-actions mt-2">
-                        <a href="<?= base_url('borrowing/history') ?>" class="btn btn-sm btn-outline-secondary">View All Activity</a>
+                        <a href="<?= base_url('borrowing') ?>" class="btn btn-sm btn-outline-secondary">View All Activity</a>
                     </div>
                 </div>
             </div>

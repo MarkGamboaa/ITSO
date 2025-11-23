@@ -74,20 +74,14 @@ class Users extends BaseController {
     );
 
     $message = "<h2>Hello, ".$data['first_name']."</h2><br>
-    <p>Your account has been created</p><a href='".base_url()."/auth/verify/".$data_insert['token']."'>Click here to verify your email</a>";
+    <p>Your account has been created</p><a href='".base_url()."/auth/verify/".$data_insert['token']."'>Click here to verify your eregistration</a>";
     
     $email = service('email');
     $email->setTo($data['email']);
-    $email->setSubject('Account Registration - Verify your email');
+    $email->setSubject('Account Registration - Verify your registration');
     $email->setMessage($message);
     
-    if(!$email->send()){
-        $session->setFlashdata('msg', 'Failed to send verification email. Please try again.');
-        return redirect()->to(base_url('users/register')); 
-    }
-    
     $usermodel->insert($data_insert);
-    $session->setFlashdata('msg', 'User registered successfully. Check email to verify account.');
     return redirect()->to(base_url('users')); 
     }
 
@@ -99,15 +93,11 @@ class Users extends BaseController {
         if($user){
             $data_update = array(
                 'email_verified' => 1,
-                'token'          => null
             );
             $usermodel->update($user['user_id'], $data_update);
-            $session->setFlashdata('msg', 'Email verified successfully. You can now login.');
             return redirect()->to(base_url('about/')); 
         }
     }
-
-
 
     public function view($user_id = null)
     {
@@ -203,12 +193,34 @@ class Users extends BaseController {
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'Deactivate User', 'id' => $id];
-
+        $usermodel = model('Users_model');
+        $user = $usermodel->find($id);
+        $data = ['title' => 'Deactivate User', 
+                'user' => $user,
+                'id' => $id];
         return view('include/head_view', $data)
             .view('include/nav_view')
             .view('ITSO/users/users_deactivate_view', $data)
             .view('include/foot_view');
+    }
+
+    public function confirmDeactivate($id = null)
+    {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+        $usermodel = model('Users_model');
+        $session = session();
+
+        $user = $usermodel->find($id);
+
+        $data_update = array(
+            'is_active' => 0
+        );
+
+        $usermodel->update($id, $data_update);
+        return redirect()->to(base_url('users/')); 
     }
 }
 ?>

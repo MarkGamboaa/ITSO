@@ -23,10 +23,11 @@ class Reservations extends BaseController
 
         $data = ['title' => 'Reservations',
                 'reservations' => $reservationmodel
-                    ->select('reservations.*, users.last_name as user_name, equipment.name as equipment_name')
+                    ->select('reservations.*, users.last_name as user_name, equipment.name as equipment_name, equipment.accessories')
                     ->join('users', 'users.user_id = reservations.user_id')
                     ->join('equipment', 'equipment.equipment_id = reservations.equipment_id')
                     ->where('reservations.status', 'Active')
+                    ->where('reservations.reservation_confirmation', 1)
                     ->paginate(10),
                 'pager' => $reservationmodel->pager 
         ];
@@ -53,71 +54,121 @@ class Reservations extends BaseController
     }
 
     public function insert()
-    {
-        
-        $reservationsmodel = model('Reservations_model');
-        $usersmodel = model('Users_model');
-        $equipmentmodel = model('Equipment_model');
-        $session = session();
-        $validation = service('validation');
+{
+    $reservationsmodel = model('Reservations_model');
+    $usersmodel = model('Users_model');
+    $equipmentmodel = model('Equipment_model');
+    $session = session();
+    $validation = service('validation');
 
-        $data = array(
-            'email' => strtolower(trim($this->request->getPost('email'))),
-            'equipment_id' => $this->request->getPost('equipment_id'),
-            'quantity' => $this->request->getPost('quantity'),
-            'reserved_date' => $this->request->getPost('reserved_date'),
-            'status' => 'Active'
-        );
-        // using validation rules
-        if(!$validation->run($data, 'reservation')){
-            $session->setFlashdata('errors', $validation->getErrors());
-            return redirect()->to(base_url('reservations/reserve'))->withInput();
-        }
-        // to check if email belongs to an active Associate
-        $user = $usersmodel->where('email', $data['email'])->where('role', 'Associate')->first();
-        if (!$user) {
-            $session->setFlashdata('errors', ['email' => 'Only active Associates can make reservations.']);
-            return redirect()->to(base_url('reservations/reserve'))->withInput();
-        }
-        // to check if user is still active
-        if($user['is_active'] != 1) {
-            $session->setFlashdata('errors', ['email' => 'This user account is not active.']);
-            return redirect()->to(base_url('reservations/reserve'))->withInput();
-        }
-
-        $reservedDate = strtotime($data['reserved_date']);
-        $minDate = strtotime('+1 day', strtotime('today'));
-        if ($reservedDate < $minDate) {
-            $session->setFlashdata('errors', ['reserved_date' => 'The reservation date must be at least 1 day in advance.']);
-            return redirect()->to(base_url('reservations/reserve'))->withInput();
-        }
-
-        // Prepare data for insertion - replace email with user_id
-        $userEmail = $data['email'];
-        $data['user_id'] = $user['user_id'];
-        unset($data['email']);
-        $equipment = $equipmentmodel->find($data['equipment_id']);
-        if (!$equipment || $equipment['available_count'] < $data['quantity']) {
-            $session->setFlashdata('errors', ['quantity' => "Not enough equipment available. Only {$equipment['available_count']} left in stock."]);
-            return redirect()->to(base_url('reservations/reserve'))->withInput();
-        }
-        $equipmentmodel->update($data['equipment_id'], [
-            'available_count' => $equipment['available_count'] - $data['quantity']
-        ]);
-
-        $reservationsmodel->insert($data);
-
-        $message = 'Reservation successful.';
-        $email = service('email');
-        $email->setTo($userEmail);
-        $email->setSubject('Reservation Successful');
-        $email->setMessage($message);
-        $email->send();
-
-        $session->setFlashdata('success', 'Reservation successful.');
-        return redirect()->to(base_url('reservations'));
-        
+    $data = array(
+        'email' => strtolower(trim($this->request->getPost('email'))),
+        'equipment_id' => $this->request->getPost('equipment_id'),
+        'quantity' => $this->request->getPost('quantity'),
+        'reserved_date' => $this->request->getPost('reserved_date'),
+        'status' => 'Active',
+        'reservation_token' => bin2hex(random_bytes(16)),
+    );
+    // using validation rules
+    if(!$validation->run($data, 'reservation')){
+        $session->setFlashdata('errors', $validation->getErrors());
+        return redirect()->to(base_url('reservations/reserve'))->withInput();
     }
+    // to check if email belongs to an active Associate
+    $user = $usersmodel->where('email', $data['email'])->where('role', 'Associate')->first();
+    if (!$user) {
+        $session->setFlashdata('errors', ['email' => 'Only active Associates can make reservations.']);
+        return redirect()->to(base_url('reservations/reserve'))->withInput();
+    }
+    // to check if user is still active
+    if($user['is_active'] != 1) {
+        $session->setFlashdata('errors', ['email' => 'This user account is not active.']);
+        return redirect()->to(base_url('reservations/reserve'))->withInput();
+    }
+
+    $reservedDate = strtotime($data['reserved_date']);
+    $minDate = strtotime('+1 day', strtotime('today'));
+    if ($reservedDate < $minDate) {
+        $session->setFlashdata('errors', ['reserved_date' => 'The reservation date must be at least 1 day in advance.']);
+        return redirect()->to(base_url('reservations/reserve'))->withInput();
+    }
+
+    // Prepare data for insertion - replace email with user_id
+    $userEmail = $data['email'];
+    $data['user_id'] = $user['user_id'];
+    unset($data['email']);
+    $equipment = $equipmentmodel->find($data['equipment_id']);
+    if (!$equipment || $equipment['available_count'] < $data['quantity']) {
+        $session->setFlashdata('errors', ['quantity' => "Only {$equipment['available_count']} left in stock."]);
+        return redirect()->to(base_url('reservations/reserve'))->withInput();
+    }
+    // REMOVED: Equipment count reduction - will be done in confirm()
+
+    $reservationsmodel->insert($data);
+
+    $message = 'Confirm your reservation by clicking the link below:<br>
+    <a href="' . base_url('reservations/confirm/' . $data['reservation_token']) . '">Confirm Reservation</a>';
+    $email = service('email');
+    $email->setTo($userEmail);
+    $email->setSubject('Confirm your reservation');
+    $email->setMessage($message);
+    $email->send();
+
+    $session->setFlashdata('success', 'Reservation successful. Please check your email to confirm.');
+    return redirect()->to(base_url('reservations'));
+}
+
+    public function confirm($reservation_token)
+    {
+    $reservationsmodel = model('Reservations_model');
+    $borrowmodel = model('BorrowRecords_Model');
+    $equipmentmodel = model('Equipment_model');
+    $session = session();
+    
+    $reservation = $reservationsmodel->where('reservation_token', $reservation_token)->first();
+    
+    if($reservation){
+        // Check if already confirmed
+        if($reservation['reservation_confirmation'] == 1){
+            $session->setFlashdata('msg', 'Reservation already confirmed.');
+            return redirect()->to(base_url('reservations'));
+        }
+        
+        // Get equipment details
+        $equipment = $equipmentmodel->find($reservation['equipment_id']);
+        
+        // Check if enough equipment available
+        if (!$equipment || $equipment['available_count'] < $reservation['quantity']) {
+            $session->setFlashdata('errors', ['quantity' => "Not enough equipment available. Only {$equipment['available_count']} left in stock."]);
+            return redirect()->to(base_url('reservations'));
+        }
+        
+        // Reduce equipment count
+        $equipmentmodel->update($reservation['equipment_id'], [
+            'available_count' => $equipment['available_count'] - $reservation['quantity']
+        ]);
+        
+        // Create borrow record
+        $borrowmodel->insert([
+            'user_id' => $reservation['user_id'],
+            'equipment_id' => $reservation['equipment_id'],
+            'borrow_quantity' => $reservation['quantity'],
+            'borrowed_at' => date('Y-m-d H:i:s'),
+            'status' => 'Borrowed'
+        ]);
+        
+        // Update reservation
+        $data_update = array(
+            'reservation_confirmation' => 1,
+        );
+        $reservationsmodel->update($reservation['reservation_id'], $data_update);
+        
+        $session->setFlashdata('msg', 'Reservation confirmed successfully.');
+        return redirect()->to(base_url('about')); 
+    }
+    
+    return redirect()->to(base_url('reservations'));
+}
 
     public function manage()
     {
