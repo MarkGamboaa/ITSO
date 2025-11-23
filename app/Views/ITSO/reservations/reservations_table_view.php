@@ -9,6 +9,8 @@
                     <th>User ID</th>
                     <th>User</th>
                     <th>Item</th>
+                    <th>Accessories</th>
+                    <th>Quantity</th>
                     <th>Reserved Date</th>
                     <th>Status</th>
                 </tr>
@@ -19,6 +21,8 @@
                     <td><?= $reservation['user_id'] ?></td>
                     <td><?= $reservation['user_name'] ?></td>
                     <td><?= $reservation['equipment_name'] ?></td>
+                    <td><?= $reservation['accessories'] ?></td>
+                    <td><?= $reservation['quantity'] ?></td>
                     <td><?= date('Y-m-d', strtotime($reservation['updated_at'])) ?></td>
                     <td><?= $reservation['status'] ?></td>
                 </tr>
