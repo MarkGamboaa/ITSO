@@ -73,6 +73,8 @@ $routes->get('itso/users/view/(:any)', 'Users::view/$1');
 $routes->get('itso/users/edit/(:any)', 'Users::edit/$1');
 $routes->get('itso/users/deactivate/(:any)', 'Users::deactivate/$1');
 $routes->post('itso/users/confirmDeactivate/(:any)', 'Users::confirmDeactivate/$1');
+$routes->get('itso/users/activate/(:any)', 'Users::activate/$1');
+$routes->post('itso/users/confirmActivate/(:any)', 'Users::confirmActivate/$1');
 $routes->get('itso/users/registrationConfirmation/(:any)', 'Users::registrationConfirmation/$1');
 $routes->get('itso/users/verificationConfirmation/(:any)', 'Users::verificationConfirmation/$1');
 

@@ -224,6 +224,25 @@ class Users extends BaseController {
         return redirect()->to(base_url('users/')); 
     }
 
+    public function confirmActivate($id = null)
+    {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+        $usermodel = model('Users_model');
+        $session = session();
+
+        $user = $usermodel->find($id);
+
+        $data_update = array(
+            'is_active' => 1
+        );
+
+        $usermodel->update($id, $data_update);
+        return redirect()->to(base_url('users/')); 
+    }
+
     public function registrationConfirmation($user_name = null)
     {
         $data = [
