@@ -165,7 +165,7 @@ class Reservations extends BaseController
             'user_id' => $reservation['user_id'],
             'equipment_id' => $reservation['equipment_id'],
             'borrow_quantity' => $reservation['quantity'],
-            'borrowed_at' => date('Y-m-d H:i:s'),
+            'borrowed_at' => $reservation['reserved_date'],
             'status' => 'Borrowed'
         ]);
         
@@ -330,6 +330,7 @@ class Reservations extends BaseController
                     ->where('equipment_id', $reservationsmodel->find($reservation_id)['equipment_id'])
                     ->where('status', 'Borrowed')
                     ->set(['updated_at' => date('Y-m-d H:i:s')])
+                    ->set(['borrowed_at' => $newDate])
                     ->update();
         
         
