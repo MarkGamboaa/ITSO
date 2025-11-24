@@ -67,12 +67,23 @@ class Equipment extends BaseController
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'View Equipment', 'id' => $id];
+
+        $equipmentModel = model('Equipment_model');
+        $equipment = $equipmentModel->find($id);
+
+        if (!$equipment) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Equipment not found");
+        }
+
+        $data = [
+            'title'     => 'View Equipment',
+            'equipment' => $equipment
+        ];
 
         return view('include/head_view', $data)
-            .view('include/nav_view')
-            .view('ITSO/equipment/view_equipment_view', $data)
-            .view('include/foot_view');
+            . view('include/nav_view')
+            . view('ITSO/equipment/view_equipment_view', $data)
+            . view('include/foot_view');
     }
 
     public function deactivate($id = null)
