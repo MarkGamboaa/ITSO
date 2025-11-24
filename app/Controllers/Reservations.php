@@ -128,7 +128,7 @@ class Reservations extends BaseController
     $email->send();
 
     $session->setFlashdata('success', 'Reservation successful. Please check your email to confirm.');
-    return redirect()->to(base_url('reservations'));
+    return redirect()->to(base_url('reservations/confirmationView'));
 }
     public function confirm($reservation_token)
     {
@@ -143,7 +143,7 @@ class Reservations extends BaseController
         // Check if already confirmed
         if($reservation['reservation_confirmation'] == 1){
             $session->setFlashdata('msg', 'Reservation already confirmed.');
-            return redirect()->to(base_url('reservations'));
+            return redirect()->to(base_url('reservations/confirmationView'));
         }
         
         // Get equipment details
@@ -152,7 +152,7 @@ class Reservations extends BaseController
         // Check if enough equipment available
         if (!$equipment || $equipment['available_count'] < $reservation['quantity']) {
             $session->setFlashdata('errors', ['quantity' => "Not enough equipment available. Only {$equipment['available_count']} left in stock."]);
-            return redirect()->to(base_url('reservations'));
+            return redirect()->to(base_url('reservations/confirmationView'));
         }
         
         // Reduce equipment count
@@ -176,10 +176,10 @@ class Reservations extends BaseController
         $reservationsmodel->update($reservation['reservation_id'], $data_update);
         
         $session->setFlashdata('msg', 'Reservation confirmed successfully.');
-        return redirect()->to(base_url('about')); 
+        return redirect()->to(base_url('reservations/confirmationView')); 
     }
     
-    return redirect()->to(base_url('reservations'));
+    return redirect()->to(base_url('reservations/confirmationView'));
 }
 
     public function manage()
@@ -327,5 +327,15 @@ class Reservations extends BaseController
 
         $session->setFlashdata('success', 'Reservation rescheduled successfully.');
         return redirect()->to(base_url('reservations'));
+    }
+
+    public function confirmationView()
+    {
+        $data = ['title' => 'Reservation Confirmed'];
+
+        return view('include/head_view', $data)
+            .view('include/nav_view')
+            .view('ITSO/reservations/confirmation_view', $data)
+            .view('include/foot_view');
     }
 }

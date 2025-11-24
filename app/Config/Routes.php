@@ -19,6 +19,8 @@ $routes->get('users/edit/(:any)', 'Users::edit/$1');
 $routes->post('users/update/(:any)', 'Users::update/$1');
 $routes->get('users/deactivate/(:any)', 'Users::deactivate/$1');
 $routes->post('users/confirmDeactivate/(:any)', 'Users::confirmDeactivate/$1');
+$routes->get('users/registrationConfirmation/(:any)', 'Users::registrationConfirmation/$1');
+$routes->get('users/verificationConfirmation/(:any)', 'Users::verificationConfirmation/$1');
 // ITSO module routes (UI only — no DB actions)
 $routes->post('auth/login', 'Auth::login');
 $routes->get('auth/login', 'Auth::index');
@@ -51,6 +53,7 @@ $routes->get('reservations/manage', 'Reservations::manage');
 $routes->post('reservations/cancel/(:num)', 'Reservations::cancel/$1');
 $routes->get('reservations/reschedule/(:num)', 'Reservations::reschedule/$1');
 $routes->post('reservations/updateSchedule/(:num)', 'Reservations::updateSchedule/$1');
+$routes->get('reservations/confirmationView', 'Reservations::confirmationView');
 
 $routes->get('reports', 'Reports::index');
 $routes->get('reports/activeEquipment', 'Reports::activeEquipment');
@@ -69,6 +72,8 @@ $routes->get('itso/users/view/(:any)', 'Users::view/$1');
 $routes->get('itso/users/edit/(:any)', 'Users::edit/$1');
 $routes->get('itso/users/deactivate/(:any)', 'Users::deactivate/$1');
 $routes->post('itso/users/confirmDeactivate/(:any)', 'Users::confirmDeactivate/$1');
+$routes->get('itso/users/registrationConfirmation/(:any)', 'Users::registrationConfirmation/$1');
+$routes->get('itso/users/verificationConfirmation/(:any)', 'Users::verificationConfirmation/$1');
 
 $routes->post('itso/auth/login', 'Auth::login');   
 $routes->get('itso/auth/login', 'Auth::index');    
@@ -107,6 +112,7 @@ $routes->get('itso/reservations/manage', 'Reservations::manage');
 $routes->post('itso/reservations/cancel/(:num)', 'Reservations::cancel/$1');
 $routes->get('itso/reservations/reschedule/(:num)', 'Reservations::reschedule/$1');
 $routes->post('itso/reservations/updateSchedule/(:num)', 'Reservations::updateSchedule/$1');
+$routes->get('itso/reservations/confirmationView', 'Reservations::confirmationView');
 
 $routes->get('itso/reports', 'Reports::index');
 $routes->get('itso/reports/activeEquipment', 'Reports::activeEquipment');

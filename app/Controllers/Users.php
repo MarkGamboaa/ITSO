@@ -87,7 +87,9 @@ class Users extends BaseController {
     }
     
     $usermodel->insert($data_insert);
-    return redirect()->to(base_url('users')); 
+    
+    // Redirect to confirmation view instead of users list
+    return redirect()->to(base_url('users/registrationConfirmation/' . urlencode($data['first_name'])));
     }
 
     public function verify($token){
@@ -100,7 +102,8 @@ class Users extends BaseController {
                 'email_verified' => 1,
             );
             $usermodel->update($user['user_id'], $data_update);
-            return redirect()->to(base_url('about/')); 
+            // Redirect to verification confirmation instead of about page
+            return redirect()->to(base_url('users/verificationConfirmation/' . urlencode($user['first_name'])));
         }
     }
 
@@ -219,6 +222,33 @@ class Users extends BaseController {
 
         $usermodel->update($id, $data_update);
         return redirect()->to(base_url('users/')); 
+    }
+
+    public function registrationConfirmation($user_name = null)
+    {
+        $data = [
+            'title' => 'Registration Successful',
+            'user_name' => urldecode($user_name)
+        ];
+
+        return view('include/head_view', $data)
+            .view('include/nav_view')
+            .view('ITSO/users/registration_confirmation_view', $data)
+            .view('include/foot_view');
+    }
+
+    public function verificationConfirmation($user_name = null)
+    {
+        $data = [
+            'title' => 'Account Verified',
+            'user_name' => urldecode($user_name),
+            'verification_link' => base_url('auth/login')
+        ];
+
+        return view('include/head_view', $data)
+            .view('include/nav_view')
+            .view('ITSO/users/registration_confirmation_view', $data)
+            .view('include/foot_view');
     }
 }
 ?>
