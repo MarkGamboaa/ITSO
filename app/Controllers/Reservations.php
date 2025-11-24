@@ -293,8 +293,10 @@ class Reservations extends BaseController
         if ($check !== null) {
             return $check;
         }
+        
 
         $reservationsmodel = model('Reservations_model');
+        $borrowmodel = model('BorrowRecords_Model');
         $session = session();
         $validation = service('validation');
 
@@ -324,6 +326,13 @@ class Reservations extends BaseController
             'reserved_date' => $newDate,
             'updated_at' => date('Y-m-d H:i:s')
         ]);
+        $borrowmodel->where('user_id', $reservationsmodel->find($reservation_id)['user_id'])
+                    ->where('equipment_id', $reservationsmodel->find($reservation_id)['equipment_id'])
+                    ->where('status', 'Borrowed')
+                    ->set(['updated_at' => date('Y-m-d H:i:s')])
+                    ->update();
+        
+        
 
         $session->setFlashdata('success', 'Reservation rescheduled successfully.');
         return redirect()->to(base_url('reservations'));

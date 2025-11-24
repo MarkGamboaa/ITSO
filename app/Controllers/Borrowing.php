@@ -29,6 +29,7 @@ class Borrowing extends BaseController
                     ->join('users', 'users.user_id = borrow_records.user_id')
                     ->join('equipment', 'equipment.equipment_id = borrow_records.equipment_id')
                     ->where('borrow_records.returned_at IS NULL', null, false)
+                    ->where('borrow_records.status', 'Borrowed')
                     ->paginate(10),
                 'pager' => $borrowingmodel->pager 
         ];
