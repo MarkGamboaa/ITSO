@@ -1,7 +1,9 @@
 <main>
     <div class="itso-container">
         <h2>Reservations</h2>
-        <a href="<?= base_url('reservations/reserve') ?>" class="btn btn-primary mb-3">Reserve Equipment</a>
+        <a href="<?= base_url('reservations/reserve') ?>" class="btn btn-primary mb-3">
+            <i class="bi bi-calendar-plus"></i> Reserve Equipment
+        </a>
         <p>Only Associates can make reservations.</p>
         <table class="table">
             <thead>

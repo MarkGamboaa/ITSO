@@ -29,7 +29,9 @@
         </table>
         <?= $pager->links(); ?>
         <div class="mt-3 d-flex justify-content-start">
-                <a href="<?= base_url('borrowing') ?>" class="btn btn-secondary me-2">&larr; Back</a>
+                <a href="<?= base_url('borrowing') ?>" class="btn btn-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
         </div>
     </div>
 </main>

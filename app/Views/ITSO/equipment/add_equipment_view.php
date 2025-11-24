@@ -25,8 +25,12 @@
             </div>
 
             <div class="mt-3 d-flex justify-content-start">
-                <a href="<?= base_url('equipment') ?>" class="btn btn-secondary me-2">&larr; Back</a>
-                <button class="btn btn-success">Add Item</button>
+                <a href="<?= base_url('equipment') ?>" class="btn btn-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+                <button class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Add Item
+                </button>
             </div>
         </form>
     </div>

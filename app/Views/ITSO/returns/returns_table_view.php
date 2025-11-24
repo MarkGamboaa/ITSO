@@ -1,7 +1,9 @@
 <main>
     <div class="itso-container">
         <h2>Returns</h2>
-        <a href="<?= base_url('returns/process') ?>" class="btn btn-primary mb-3">Process Return</a>
+        <a href="<?= base_url('returns/process') ?>" class="btn btn-primary mb-3">
+            <i class="bi bi-arrow-return-left"></i> Process Return
+        </a>
         <table class="table">
             <thead>
                 <tr>
