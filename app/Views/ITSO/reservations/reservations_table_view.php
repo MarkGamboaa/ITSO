@@ -24,7 +24,7 @@
                     <td><?= $reservation['equipment_name'] ?></td>
                     <td><?= $reservation['accessories'] ?></td>
                     <td><?= $reservation['quantity'] ?></td>
-                    <td><?= date('Y-m-d', strtotime($reservation['updated_at'])) ?></td>
+                    <td><?= date('Y-m-d', strtotime($reservation['reserved_date'])) ?></td>
                     <td><?= $reservation['status'] ?></td>
                     <td>
                         <div class="d-flex gap-2">
