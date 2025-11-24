@@ -23,9 +23,6 @@
                     <a href="<?= base_url('users/register') ?>" class="btn btn-outline-light me-2">
                         <i class="bi bi-person-plus"></i> New User
                     </a>
-                    <a href="<?= base_url('equipment/add') ?>" class="btn btn-warning" style="background:var(--feu-yellow);color:var(--text-dark);border:0">
-                        <i class="bi bi-plus-circle"></i> Add Equipment
-                    </a>
                 </div>
             </div>
         </div>
