@@ -195,4 +195,137 @@ class Reservations extends BaseController
             .view('ITSO/reservations/manage_reservations_view', $data)
             .view('include/foot_view');
     }
+
+    public function cancel($reservation_id)
+    {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+
+        $reservationsmodel = model('Reservations_model');
+        $equipmentmodel = model('Equipment_model');
+        $borrowmodel = model('BorrowRecords_Model');
+        $session = session();
+
+        // Get reservation details
+        $reservation = $reservationsmodel->find($reservation_id);
+        
+        if (!$reservation) {
+            $session->setFlashdata('errors', ['general' => 'Reservation not found.']);
+            return redirect()->to(base_url('reservations'));
+        }
+
+        if ($reservation['status'] !== 'Active') {
+            $session->setFlashdata('errors', ['general' => 'Reservation is not active and cannot be cancelled.']);
+            return redirect()->to(base_url('reservations'));
+        }
+
+        // If reservation was confirmed, restore equipment count and update borrow record
+        if ($reservation['reservation_confirmation'] == 1) {
+            // Get equipment details
+            $equipment = $equipmentmodel->find($reservation['equipment_id']);
+            
+            // Restore equipment count
+            $equipmentmodel->update($reservation['equipment_id'], [
+                'available_count' => $equipment['available_count'] + $reservation['quantity']
+            ]);
+
+            // Update borrow record status to cancelled
+            $borrowmodel->where('user_id', $reservation['user_id'])
+                       ->where('equipment_id', $reservation['equipment_id'])
+                       ->where('status', 'Borrowed')
+                       ->set(['status' => 'Cancelled', 'updated_at' => date('Y-m-d H:i:s')])
+                       ->update();
+        }
+
+        // Update reservation status
+        $reservationsmodel->update($reservation_id, [
+            'status' => 'Cancelled',
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        $session->setFlashdata('success', 'Reservation cancelled successfully.');
+        return redirect()->to(base_url('reservations'));
+    }
+
+    public function reschedule($reservation_id)
+    {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+
+        $reservationsmodel = model('Reservations_model');
+        
+        // Get reservation details with user and equipment info
+        $reservation = $reservationsmodel
+            ->select('reservations.*, users.last_name as user_name, equipment.name as equipment_name')
+            ->join('users', 'users.user_id = reservations.user_id')
+            ->join('equipment', 'equipment.equipment_id = reservations.equipment_id')
+            ->where('reservations.reservation_id', $reservation_id)
+            ->first();
+
+        if (!$reservation) {
+            session()->setFlashdata('errors', ['general' => 'Reservation not found.']);
+            return redirect()->to(base_url('reservations'));
+        }
+
+        if ($reservation['status'] !== 'Active') {
+            session()->setFlashdata('errors', ['general' => 'Only active reservations can be rescheduled.']);
+            return redirect()->to(base_url('reservations'));
+        }
+
+        $data = [
+            'title' => 'Reschedule Reservation',
+            'reservation' => $reservation
+        ];
+
+        return view('include/head_view', $data)
+            .view('include/nav_view')
+            .view('ITSO/reservations/reschedule_view', $data)
+            .view('include/foot_view');
+    }
+
+    public function updateSchedule($reservation_id)
+    {
+        $check = $this->auth();
+        if ($check !== null) {
+            return $check;
+        }
+
+        $reservationsmodel = model('Reservations_model');
+        $session = session();
+        $validation = service('validation');
+
+        $newDate = $this->request->getPost('reserved_date');
+
+        // Validate the new date
+        $validation->setRules([
+            'reserved_date' => 'required|valid_date'
+        ]);
+
+        if (!$validation->run(['reserved_date' => $newDate])) {
+            $session->setFlashdata('errors', $validation->getErrors());
+            return redirect()->to(base_url('reservations/reschedule/' . $reservation_id))->withInput();
+        }
+
+        // Check if the new date is at least 1 day in advance
+        $reservedDate = strtotime($newDate);
+        $minDate = strtotime('+1 day', strtotime('today'));
+        
+        if ($reservedDate < $minDate) {
+            $session->setFlashdata('errors', ['reserved_date' => 'The reservation date must be at least 1 day in advance.']);
+            return redirect()->to(base_url('reservations/reschedule/' . $reservation_id))->withInput();
+        }
+
+        // Update the reservation date
+        $reservationsmodel->update($reservation_id, [
+            'reserved_date' => $newDate,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        $session->setFlashdata('success', 'Reservation rescheduled successfully.');
+        return redirect()->to(base_url('reservations'));
+    }
 }

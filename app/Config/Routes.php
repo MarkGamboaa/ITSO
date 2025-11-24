@@ -45,8 +45,12 @@ $routes->get('returns/process', 'Returns::process');
 $routes->get('reservations', 'Reservations::index');
 $routes->get('reservations/reserve', 'Reservations::reserve');
 $routes->post('reservations/reserve', 'Reservations::reserve');
+$routes->post('reservations/insert', 'Reservations::insert');
 $routes->get('reservations/confirm/(:any)', 'Reservations::confirm/$1');
 $routes->get('reservations/manage', 'Reservations::manage');
+$routes->post('reservations/cancel/(:num)', 'Reservations::cancel/$1');
+$routes->get('reservations/reschedule/(:num)', 'Reservations::reschedule/$1');
+$routes->post('reservations/updateSchedule/(:num)', 'Reservations::updateSchedule/$1');
 
 $routes->get('reports', 'Reports::index');
 $routes->get('reports/activeEquipment', 'Reports::activeEquipment');
@@ -100,6 +104,9 @@ $routes->post('itso/reservations/reserve', 'Reservations::reserve');
 $routes->post('itso/reservations/insert', 'Reservations::insert');
 $routes->get('itso/reservations/confirm/(:any)', 'Reservations::confirm/$1');
 $routes->get('itso/reservations/manage', 'Reservations::manage');
+$routes->post('itso/reservations/cancel/(:num)', 'Reservations::cancel/$1');
+$routes->get('itso/reservations/reschedule/(:num)', 'Reservations::reschedule/$1');
+$routes->post('itso/reservations/updateSchedule/(:num)', 'Reservations::updateSchedule/$1');
 
 $routes->get('itso/reports', 'Reports::index');
 $routes->get('itso/reports/activeEquipment', 'Reports::activeEquipment');
