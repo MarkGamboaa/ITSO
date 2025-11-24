@@ -8,7 +8,9 @@
             <dt class="col-sm-3">Accessories</dt><dd class="col-sm-9">Charger</dd>
         </dl>
         <div class="mt-3 d-flex justify-content-start">
-            <a href="<?= base_url('equipment') ?>" class="btn btn-secondary">&larr; Back</a>
+            <a href="<?= base_url('equipment') ?>" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
         </div>
     </div>
 </main>

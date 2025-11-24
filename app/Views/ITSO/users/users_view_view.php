@@ -9,6 +9,8 @@
             <dt class="col-sm-3">Email</dt><dd class="col-sm-9" id="email"> <?= $user['email']?></dd>
             <dt class="col-sm-3">Role</dt><dd class="col-sm-9" id="role"><?= $user['role']?></dd>
         </dl>
-        <a href="<?= base_url('users') ?>" class="btn btn-secondary mb-3">&larr; Back</a>
+        <a href="<?= base_url('users') ?>" class="btn btn-secondary mb-3">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
     </div>
 </main>

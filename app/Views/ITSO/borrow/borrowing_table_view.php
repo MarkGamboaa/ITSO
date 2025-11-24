@@ -3,8 +3,12 @@
         <h2>Borrowing</h2>
         <p>Current borrowed items and quick actions.</p>
             <div class="mb-3 d-flex gap-2">
-                <a href="<?= base_url('borrowing/borrow') ?>" class="btn btn-primary">Borrow Item</a>
-                <a href="<?= base_url('borrowing/history') ?>" class="btn btn-outline-secondary">Borrowing History</a>
+                <a href="<?= base_url('borrowing/borrow') ?>" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Borrow Item
+                </a>
+                <a href="<?= base_url('borrowing/history') ?>" class="btn btn-outline-secondary">
+                    <i class="bi bi-clock-history"></i> Borrowing History
+                </a>
             </div>
         <table class="table">
             <thead>

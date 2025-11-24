@@ -9,7 +9,9 @@
             </tbody>
         </table>
         <div class="mt-3 d-flex justify-content-end">
-            <a href="<?= base_url('reservations') ?>" class="btn btn-secondary">&larr; Back</a>
+            <a href="<?= base_url('reservations') ?>" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
         </div>
     </div>
 </main>

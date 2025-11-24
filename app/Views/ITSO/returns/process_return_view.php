@@ -8,8 +8,12 @@
             </div>
             <p class="text-muted">Note: an email would be sent to the borrower upon processing.</p>
             <div class="mt-3 d-flex justify-content-end">
-                <a href="<?= base_url('returns') ?>" class="btn btn-secondary me-2">&larr; Back</a>
-                <button class="btn btn-success">Complete Return</button>
+                <a href="<?= base_url('returns') ?>" class="btn btn-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+                <button class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Complete Return
+                </button>
             </div>
         </form>
     </div>

@@ -6,8 +6,12 @@
         <form method="post" action="<?= base_url('users/confirmDeactivate/' . esc($id)) ?>">
             <?= csrf_field() ?>
             <div class="mt-3 d-flex justify-content-start">
-                <a href="<?= base_url('users') ?>" class="btn btn-secondary me-2">&larr; Back</a>
-                <button class="btn btn-danger" type="submit">Deactivate</button>
+                <a href="<?= base_url('users') ?>" class="btn btn-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+                <button class="btn btn-danger" type="submit">
+                    <i class="bi bi-person-x"></i> Deactivate
+                </button>
             </div>
         </form>
     </div>

@@ -35,8 +35,12 @@
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <a href="<?= base_url('auth/login') ?>" class="btn btn-outline-secondary">&larr; Back to Login</a>
-                                    <button type="submit" class="btn btn-success" style="background:var(--feu-green);border:0">Reset Password</button>
+                                    <a href="<?= base_url('auth/login') ?>" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-left"></i> Back to Login
+                                    </a>
+                                    <button type="submit" class="btn btn-success" style="background:var(--feu-green);border:0">
+                                        <i class="bi bi-key"></i> Reset Password
+                                    </button>
                                 </div>
                             </form>
                         </div>

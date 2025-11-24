@@ -1,7 +1,9 @@
 <main>
     <div class="itso-container">
         <h2>Equipment Management</h2>
-        <a href="<?= base_url('equipment/add') ?>" class="btn btn-success mb-3">Add Equipment</a>
+        <a href="<?= base_url('equipment/add') ?>" class="btn btn-success mb-3">
+            <i class="bi bi-plus-circle"></i> Add Equipment
+        </a>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -21,9 +23,15 @@
                             <td><?= esc($item['available_count']) ?> / <?= esc($item['total_count']) ?></td>
                             <td><?= $item['is_active'] ? 'Available' : 'Inactive' ?></td>
                             <td class="d-flex gap-2">
-                                <a class="btn btn-sm btn-primary" href="<?= base_url('equipment/view/'.$item['equipment_id']) ?>">View</a>
-                                <a class="btn btn-sm btn-secondary" href="<?= base_url('equipment/edit/'.$item['equipment_id']) ?>">Edit</a>
-                                <a class="btn btn-sm btn-danger" href="<?= base_url('equipment/deactivate/'.$item['equipment_id']) ?>">Deactivate</a>
+                                <a class="btn btn-sm btn-primary" href="<?= base_url('equipment/view/'.$item['equipment_id']) ?>">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                                <a class="btn btn-sm btn-secondary" href="<?= base_url('equipment/edit/'.$item['equipment_id']) ?>">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a class="btn btn-sm btn-danger" href="<?= base_url('equipment/deactivate/'.$item['equipment_id']) ?>">
+                                    <i class="bi bi-x-circle"></i> Deactivate
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

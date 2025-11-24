@@ -16,7 +16,15 @@
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                <a href="<?= base_url('auth/login') ?>" class="btn btn-outline-light me-2">Login</a>
+                <?php if (session()->get('isLoggedIn') && session()->get('role') === 'ITSO'): ?>
+                    <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-light me-2">
+                        Logout
+                    </a>
+                <?php else: ?>
+                    <a href="<?= base_url('auth/login') ?>" class="btn btn-outline-light me-2">
+                        Login
+                    </a>
+                <?php endif; ?>
             </form>
         </div>
     </div>

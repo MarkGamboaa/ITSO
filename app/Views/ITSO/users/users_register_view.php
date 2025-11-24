@@ -19,8 +19,12 @@
                 <select class="form-select" name="role" id="role"><option>Associate</option><option>Student</option></select>
             </div>
             <div class="mt-3 d-flex justify-content-start">
-                <a href="<?= base_url('users') ?>" class="btn btn-secondary me-2">&larr; Back</a>
-                <button class="btn btn-success">Register</button>
+                <a href="<?= base_url('users') ?>" class="btn btn-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+                <button class="btn btn-success">
+                    <i class="bi bi-person-plus"></i> Register
+                </button>
             </div>
         </form>
     </div>

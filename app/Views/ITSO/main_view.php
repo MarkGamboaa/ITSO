@@ -20,8 +20,9 @@
                     <h1 class="h3 mb-1"><?= isset($title) ? esc($title) : 'ITSO Dashboard' ?></h1>
                 </div>
                 <div class="text-end">
-                    <a href="<?= base_url('users/register') ?>" class="btn btn-outline-light me-2">New User</a>
-                    <a href="<?= base_url('equipment/add') ?>" class="btn btn-warning" style="background:var(--feu-yellow);color:var(--text-dark);border:0">Add Equipment</a>
+                    <a href="<?= base_url('users/register') ?>" class="btn btn-outline-light me-2">
+                        <i class="bi bi-person-plus"></i> New User
+                    </a>
                 </div>
             </div>
         </div>
@@ -90,7 +91,9 @@
                         </table>
                     </div>
                     <div class="card-actions mt-2">
-                        <a href="<?= base_url('borrowing') ?>" class="btn btn-sm btn-outline-secondary">View All Activity</a>
+                        <a href="<?= base_url('borrowing') ?>" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-list"></i> View All Activity
+                        </a>
                     </div>
                 </div>
             </div>
@@ -99,14 +102,24 @@
                 <div class="itso-card mb-3">
                     <h6 class="mb-2">Quick Actions</h6>
                     <div class="d-grid gap-2">
-                        <a href="<?= base_url('equipment/add') ?>" class="btn btn-outline-success">Add Equipment</a>
-                        <a href="<?= base_url('borrowing/borrow') ?>" class="btn btn-outline-primary">Borrow Item</a>
-                        <a href="<?= base_url('reservations/reserve') ?>" class="btn btn-outline-warning">Reserve Equipment</a>
-                        <a href="<?= base_url('users/register') ?>" class="btn btn-outline-secondary">Register User</a>
+                        <a href="<?= base_url('equipment/add') ?>" class="btn btn-outline-success">
+                            <i class="bi bi-plus-circle"></i> Add Equipment
+                        </a>
+                        <a href="<?= base_url('borrowing/borrow') ?>" class="btn btn-outline-primary">
+                            <i class="bi bi-box"></i> Borrow Item
+                        </a>
+                        <a href="<?= base_url('reservations/reserve') ?>" class="btn btn-outline-warning">
+                            <i class="bi bi-calendar-plus"></i> Reserve Equipment
+                        </a>
+                        <a href="<?= base_url('users/register') ?>" class="btn btn-outline-secondary">
+                            <i class="bi bi-person-plus"></i> Register User
+                        </a>
                     </div>
                 </div>
                 <div class="mt-3">
-                    <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger">Logout</a>
+                    <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
                 </div>
     </div>
 </main>
