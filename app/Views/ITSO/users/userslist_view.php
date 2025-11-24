@@ -33,9 +33,11 @@
                                href="<?= base_url('users/edit/' . $user['user_id']) ?>">
                                 <i class="bi bi-pencil"></i> Edit
                             </a>
-                            <a class="btn btn-sm" 
+                            <a class="btn btn-sm deactivate-user-btn" 
                                style="background-color: #dc3545; color: #fff; border: 1px solid #dc3545;"
-                               href="<?= base_url('users/deactivate/' . $user['user_id']) ?>">
+                               data-user-id="<?= $user['user_id'] ?>"
+                               data-user-name="<?= esc($user['first_name'] . ' ' . $user['last_name']) ?>"
+                               title="Deactivate User">
                                 <i class="bi bi-person-x"></i> Deactivate
                             </a>
                         </div>
@@ -46,4 +48,72 @@
         </table>
         <?= $pager->links(); ?>
     </div>
+
+    <!-- Deactivate User Confirmation Modal -->
+    <div class="modal fade" id="deactivateUserModal" tabindex="-1" aria-labelledby="deactivateUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deactivateUserModalLabel">Deactivate User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to deactivate the following user?</p>
+                    <ul>
+                        <li><strong>User:</strong> <span id="modalDeactivateUserName"></span></li>
+                        <li><strong>User ID:</strong> <span id="modalDeactivateUserId"></span></li>
+                    </ul>
+                    <div class="alert alert-warning">
+                        <strong>Warning:</strong> This action will prevent the user from accessing the system.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" 
+                            style="background-color: #6c757d; color: #fff; border: 1px solid #6c757d;" 
+                            data-bs-dismiss="modal">
+                        <i class="bi bi-x"></i> Cancel
+                    </button>
+                    <form id="deactivateUserForm" method="POST" style="display: inline;">
+                        <?= csrf_field() ?>
+                        <button type="submit" class="btn" 
+                                style="background-color: #dc3545; color: #fff; border: 1px solid #dc3545;">
+                            <i class="bi bi-person-x"></i> Yes, Deactivate User
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle deactivate user modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const deactivateUserModal = document.getElementById('deactivateUserModal');
+            const modalDeactivateUserName = document.getElementById('modalDeactivateUserName');
+            const modalDeactivateUserId = document.getElementById('modalDeactivateUserId');
+            const deactivateUserForm = document.getElementById('deactivateUserForm');
+            
+            if (deactivateUserModal && modalDeactivateUserName && modalDeactivateUserId && deactivateUserForm) {
+                const bsModal = new bootstrap.Modal(deactivateUserModal);
+                
+                const deactivateButtons = document.querySelectorAll('.deactivate-user-btn');
+                
+                deactivateButtons.forEach(function(button) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        const userId = this.getAttribute('data-user-id');
+                        const userName = this.getAttribute('data-user-name');
+                        
+                        modalDeactivateUserName.textContent = userName;
+                        modalDeactivateUserId.textContent = userId;
+                        
+                        deactivateUserForm.action = '<?= base_url('users/confirmDeactivate/') ?>' + userId;
+                        
+                        bsModal.show();
+                    });
+                });
+            }
+        });
+    </script>
 </main>

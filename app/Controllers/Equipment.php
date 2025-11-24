@@ -81,12 +81,26 @@ class Equipment extends BaseController
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'Deactivate Equipment', 'id' => $id];
-
-        return view('include/head_view', $data)
-            .view('include/nav_view')
-            .view('ITSO/equipment/deactivate_equipment_view', $data)
-            .view('include/foot_view');
+        
+        $equipmentmodel = model('Equipment_model');
+        $session = session();
+        
+        // Handle POST request for deactivation
+        if ($this->request->getMethod() === 'post') {
+            $equipment = $equipmentmodel->find($id);
+            
+            if ($equipment) {
+                $equipmentmodel->update($id, ['is_active' => 0]);
+                $session->setFlashdata('success', 'Equipment deactivated successfully.');
+            } else {
+                $session->setFlashdata('errors', ['general' => 'Equipment not found.']);
+            }
+            
+            return redirect()->to(base_url('equipment'));
+        }
+        
+        // For GET request, redirect to equipment list (modal will handle confirmation)
+        return redirect()->to(base_url('equipment'));
     }
     public function insert(){
         $equipmentmodel = model('Equipment_model');

@@ -19,11 +19,6 @@
                 <div>
                     <h1 class="h3 mb-1"><?= isset($title) ? esc($title) : 'ITSO Dashboard' ?></h1>
                 </div>
-                <div class="text-end">
-                    <a href="<?= base_url('users/register') ?>" class="btn btn-outline-light me-2">
-                        <i class="bi bi-person-plus"></i> New User
-                    </a>
-                </div>
             </div>
         </div>
 

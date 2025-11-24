@@ -36,13 +36,11 @@
                                title="Reschedule">
                                 <i class="bi bi-calendar-event"></i> Reschedule
                             </a>
-                            <button type="button" class="btn btn-sm" 
+                            <button type="button" class="btn btn-sm cancel-btn" 
                                     style="background-color: #dc3545; color: #fff; border: 1px solid #dc3545;"
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#cancelModal"
                                     data-reservation-id="<?= $reservation['reservation_id'] ?>"
-                                    data-user-name="<?= $reservation['user_name'] ?>"
-                                    data-equipment-name="<?= $reservation['equipment_name'] ?>"
+                                    data-user-name="<?= esc($reservation['user_name']) ?>"
+                                    data-equipment-name="<?= esc($reservation['equipment_name']) ?>"
                                     title="Cancel Reservation">
                                 <i class="bi bi-x-circle"></i> Cancel
                             </button>
@@ -57,7 +55,7 @@
 
     <!-- Cancel Confirmation Modal -->
     <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="cancelModalLabel">Cancel Reservation</h5>
@@ -89,21 +87,57 @@
     <script>
         // Handle cancel modal data population
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, setting up modal event listeners');
+            
             const cancelModal = document.getElementById('cancelModal');
-            if (cancelModal) {
-                cancelModal.addEventListener('show.bs.modal', function(event) {
-                    const button = event.relatedTarget;
-                    const reservationId = button.getAttribute('data-reservation-id');
-                    const userName = button.getAttribute('data-user-name');
-                    const equipmentName = button.getAttribute('data-equipment-name');
-                    
-                    // Update modal content
-                    document.getElementById('modalUserName').textContent = userName;
-                    document.getElementById('modalEquipmentName').textContent = equipmentName;
-                    
-                    // Update form action
-                    const form = document.getElementById('cancelForm');
-                    form.action = '<?= base_url('reservations/cancel/') ?>' + reservationId;
+            const modalUserName = document.getElementById('modalUserName');
+            const modalEquipmentName = document.getElementById('modalEquipmentName');
+            const cancelForm = document.getElementById('cancelForm');
+            
+            if (cancelModal && modalUserName && modalEquipmentName && cancelForm) {
+                console.log('Modal elements found');
+                
+                // Initialize Bootstrap modal
+                const bsModal = new bootstrap.Modal(cancelModal);
+                
+                // Add click event listeners to all cancel buttons
+                const cancelButtons = document.querySelectorAll('.cancel-btn');
+                console.log('Found cancel buttons:', cancelButtons.length);
+                
+                cancelButtons.forEach(function(button, index) {
+                    button.addEventListener('click', function(e) {
+                        console.log('Cancel button clicked:', index);
+                        
+                        const reservationId = this.getAttribute('data-reservation-id');
+                        const userName = this.getAttribute('data-user-name');
+                        const equipmentName = this.getAttribute('data-equipment-name');
+                        
+                        console.log('Button data:', {
+                            id: reservationId,
+                            user: userName,
+                            equipment: equipmentName
+                        });
+                        
+                        // Update modal content
+                        modalUserName.textContent = userName;
+                        modalEquipmentName.textContent = equipmentName;
+                        
+                        // Update form action
+                        cancelForm.action = '<?= base_url('reservations/cancel/') ?>' + reservationId;
+                        
+                        console.log('Form action set to:', cancelForm.action);
+                        
+                        // Show modal
+                        bsModal.show();
+                        console.log('Modal should be showing now');
+                    });
+                });
+            } else {
+                console.error('Some modal elements not found:', {
+                    modal: !!cancelModal,
+                    userName: !!modalUserName,
+                    equipmentName: !!modalEquipmentName,
+                    form: !!cancelForm
                 });
             }
         });
