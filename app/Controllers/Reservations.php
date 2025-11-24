@@ -128,7 +128,7 @@ class Reservations extends BaseController
     $email->send();
 
     $session->setFlashdata('success', 'Reservation successful. Please check your email to confirm.');
-    return redirect()->to(base_url('reservations/confirmationView'));
+    return redirect()->to(base_url('reservations/'));
 }
     public function confirm($reservation_token)
     {

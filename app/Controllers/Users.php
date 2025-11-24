@@ -89,7 +89,7 @@ class Users extends BaseController {
     $usermodel->insert($data_insert);
     
     // Redirect to confirmation view instead of users list
-    return redirect()->to(base_url('users/registrationConfirmation/' . urlencode($data['first_name'])));
+    return redirect()->to(base_url('users/'));
     }
 
     public function verify($token){
