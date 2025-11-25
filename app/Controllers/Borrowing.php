@@ -22,6 +22,41 @@ class Borrowing extends BaseController
             return $check;
         }
         $borrowingmodel = model('BorrowRecords_Model');
+        $reservationmodel = model('Reservations_Model');
+        $equipmentmodel = model('Equipment_model');
+        
+        // Check all reservations and convert to borrow if reserved_date is today
+        $currentDate = '2025-11-28';
+        $reservations = $reservationmodel->where('reserved_date', $currentDate)
+                                         ->where('status', 'Active')
+                                         ->where('reservation_confirmation', 1)
+                                         ->findAll();
+        
+        foreach ($reservations as $reservation) {
+            // Get equipment details
+            $equipment = $equipmentmodel->find($reservation['equipment_id']);
+            
+            if ($equipment && $equipment['available_count'] >= $reservation['quantity']) {
+                // Reduce equipment count
+                $equipmentmodel->update($reservation['equipment_id'], [
+                    'available_count' => $equipment['available_count'] - $reservation['quantity']
+                ]);
+                
+                // Create borrow record
+                $borrowingmodel->insert([
+                    'user_id' => $reservation['user_id'],
+                    'equipment_id' => $reservation['equipment_id'],
+                    'borrow_quantity' => $reservation['quantity'],
+                    'borrowed_at' => $reservation['reserved_date'],
+                    'status' => 'Borrowed'
+                ]);
+                
+                // Update reservation status to 'completed'
+                $reservationmodel->update($reservation['reservation_id'], [
+                    'status' => 'Completed'
+                ]);
+            }
+        }
 
         $data = ['title' => 'Borrowing',
                 'borrowing' => $borrowingmodel
