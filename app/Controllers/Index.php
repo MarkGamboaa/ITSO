@@ -26,8 +26,8 @@ class Index extends BaseController {
             'title' => 'ITSO - DASHBOARD',
             'totalUsers' => $usermodel->countAllResults(),
             'totalEquipment' => $equipmentmodel->countAllResults(),
-            'totalBorrowed' => $borrowmodel->where('returned_at IS NULL', null, false)->countAllResults(false),
-            'totalReservations' => $reservationmodel->where('reservation_confirmation', '1')->countAllResults(),
+            'totalBorrowed' => $borrowmodel->where('returned_at IS NULL', null, false)->where('status', 'Borrowed')->countAllResults(false),
+            'totalReservations' => $reservationmodel->where('reservation_confirmation', '1')->where('status', 'Active')->countAllResults(),
             'borrowing' => $borrowmodel
                     ->select('borrow_records.*, users.last_name as user_name, equipment.name as equipment_name, equipment.accessories as accessories')
                     ->join('users', 'users.user_id = borrow_records.user_id')

@@ -26,7 +26,7 @@ class Borrowing extends BaseController
         $equipmentmodel = model('Equipment_model');
         
         // Check all reservations and convert to borrow if reserved_date is today
-        $currentDate = '2025-11-28';
+        $currentDate = date('Y-m-d');
         $reservations = $reservationmodel->where('reserved_date', $currentDate)
                                          ->where('status', 'Active')
                                          ->where('reservation_confirmation', 1)
