@@ -34,7 +34,14 @@ class Reports extends BaseController
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'Active Equipment Report'];
+        $equipmentmodel = model('Equipment_model');
+        $equipmentList = $equipmentmodel->where('is_active', '1')->paginate(10);
+
+        $data = ['title' => 'Active Equipment Report',
+                 'equipmentList' => $equipmentList,
+                 'pager' => $equipmentmodel->pager
+                ];
+        $equipmentmodel->pager->setPath('reports/activeEquipment');
 
         return view('include/head_view', $data)
             .view('include/nav_view')
@@ -48,7 +55,13 @@ class Reports extends BaseController
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'Unusable Equipment Report'];
+        $equipmentmodel = model('Equipment_model');
+        $equipmentList = $equipmentmodel->where('is_active', '0')->where('available_count <=', 0)->paginate(10);
+        $data = ['title' => 'Unusable Equipment Report',
+                 'equipmentList' => $equipmentList,
+                 'pager' => $equipmentmodel->pager
+                ];
+        $equipmentmodel->pager->setPath('reports/unusableEquipment');
 
         return view('include/head_view', $data)
             .view('include/nav_view')
@@ -58,15 +71,30 @@ class Reports extends BaseController
 
     public function userHistory()
     {
-        $check = $this->auth();
-        if ($check !== null) {
-            return $check;
-        }
-        $data = ['title' => 'User History Report'];
+    $check = $this->auth();
+    if ($check !== null) {
+        return $check;
+    }
+    $usermodel = model('Users_model');
+    $borrowingmodel = model('BorrowRecords_Model');
+    $equipmentmodel = model('Equipment_model');
 
-        return view('include/head_view', $data)
-            .view('include/nav_view')
-            .view('ITSO/reports/report_user_history_view', $data)
-            .view('include/foot_view');
+    $data = ['title' => 'Borrowed User History Report',
+            'borrowing' => $borrowingmodel
+                ->select('borrow_records.*, users.last_name as user_name, equipment.name as equipment_name, equipment.accessories as accessories')
+                ->join('users', 'users.user_id = borrow_records.user_id')
+                ->join('equipment', 'equipment.equipment_id = borrow_records.equipment_id')
+                ->where('borrow_records.returned_at IS NOT NULL', null, false)
+                ->where('borrow_records.status', 'Returned')
+                ->paginate(10),
+            'pager' => $borrowingmodel->pager 
+    ];
+    $borrowingmodel->pager->setPath('reports/userHistory');
+
+
+    return view('include/head_view', $data)
+        .view('include/nav_view')
+        .view('ITSO/reports/report_user_history_view', $data)
+        .view('include/foot_view');
     }
 }

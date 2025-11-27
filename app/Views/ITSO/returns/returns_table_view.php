@@ -7,23 +7,27 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Ref</th>
-                    <th>User</th>
-                    <th>Item</th>
-                    <th>Condition</th>
+                    <th>User ID</th>
+                    <th>Fullname</th>
+                    <th>Equipment</th>
+                    <th>Accessories</th>
+                    <th>Return Condition</th>
                     <th>Date Returned</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
+                <?php foreach ($returnedItems as $item): ?>
                 <tr>
-                    <td>BR-001</td>
-                    <td>Marlon Viluz</td>
-                    <td>Laptop (EQ-001)</td>
-                    <td>Good</td>
-                    <td>2025-11-17</td>
-                    <td>Returned</td>
+                    <td><?= esc($item['id']) ?></td>
+                    <td><?= esc($item['first_name'] . ' ' . $item['last_name']) ?></td>
+                    <td><?= esc($item['name']) ?></td>
+                    <td><?= esc($item['accessories']) ?></td>
+                    <td><?= esc($item['return_condition']) ?></td>
+                    <td><?= esc($item['returned_at']) ?></td>
+                    <td><?= esc($item['status']) ?></td>
                 </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

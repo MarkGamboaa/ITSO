@@ -19,7 +19,8 @@ class BorrowRecords_Model extends Model
         'borrow_quantity',
         'borrowed_at',
         'returned_at',
-        'status'
+        'status',
+        'return_condition'
     ];
 
     protected $useTimestamps = false;

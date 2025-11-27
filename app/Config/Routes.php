@@ -44,6 +44,7 @@ $routes->get('borrowing/history', 'Borrowing::history');
 
 $routes->get('returns', 'Returns::index');
 $routes->get('returns/process', 'Returns::process');
+$routes->post('returns/completeReturn', 'Returns::completeReturn');
 
 $routes->get('reservations', 'Reservations::index');
 $routes->get('reservations/reserve', 'Reservations::reserve');
@@ -106,6 +107,7 @@ $routes->post('itso/borrowing/insert', 'Borrowing::insert');
 
 $routes->get('itso/returns', 'Returns::index');
 $routes->get('itso/returns/process', 'Returns::process');
+$routes->post('itso/returns/completeReturn', 'Returns::completeReturn');
 
 $routes->get('itso/reservations', 'Reservations::index');
 $routes->get('itso/reservations/reserve', 'Reservations::reserve');
@@ -131,4 +133,4 @@ $routes->get('/products', 'Products::index');
 $routes->get('/products/add', 'Products::add');
 $routes->get('/products/edit/(:num)', 'Products::edit/$1');
 $routes->get('/products/view/(:num)', 'Products::view/$1');
-// ...existing routes...
+// ...existing routes...s
