@@ -56,6 +56,13 @@ class Validation extends BaseConfig
         'role'       => 'required|in_list[ITSO,Associate,Student]'
     ];
 
+    public array $equipment_update = [
+        'name'        => 'required|min_length[3]|max_length[255]',
+        'total_count' => 'required|integer|greater_than_equal_to[0]',
+        'accessories' => 'permit_empty|max_length[500]',
+    ];
+
+
     public array $reservation = [
         'email'         => 'required|valid_email',
         'equipment_id'  => 'required|integer|is_not_unique[equipment.equipment_id]',
