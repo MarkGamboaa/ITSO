@@ -18,7 +18,7 @@
                 <?php foreach($users as $user): ?>
                 <tr>
                     <td><?= $user['user_id'] ?></td>
-                    <td><?= $user['last_name'] ?></td>
+                    <td><?= $user['first_name'] . ' ' . $user['last_name'] ?></td>
                     <td><?= $user['role'] ?></td>
                     <td><?= $user['is_active'] == 1 ? 'Active' : 'Deactivated' ?></td>
                     <td>
