@@ -154,9 +154,6 @@ class Borrowing extends BaseController
             $equipmentmodel->update($data['equipment_id'], [
                 'available_count' => $equipment['available_count'] - $data['borrow_quantity']
             ]);
-
-            
-            
             $session->setFlashdata('success', 'Equipment borrowed successfully');
             return redirect()->to(base_url('borrowing'));
         }

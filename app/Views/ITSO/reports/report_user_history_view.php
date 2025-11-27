@@ -13,21 +13,28 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Ref</th>
-                    <th>Item</th>
-                    <th>Borrowed</th>
-                    <th>Returned</th>
+                    <th>User ID</th>
+                    <th>Fullname</th>
+                    <th>Equipment</th>
+                    <th>Accessories</th>
+                    <th>Borrowed At</th>
+                    <th>Returned At</th>
                 </tr>
             </thead>
             <tbody>
+                <?php foreach($borrowing as $record): ?>
                 <tr>
-                    <td>BR-001</td>
-                    <td>Laptop (EQ-001)</td>
-                    <td>2025-10-15</td>
-                    <td>2025-11-17</td>
+                    <td><?= $record['user_id'] ?></td>
+                    <td><?= $record['user_name'] ?></td>
+                    <td><?= $record['equipment_name'] ?></td>
+                    <td><?= $record['accessories'] ?></td>
+                    <td><?= $record['borrowed_at'] ?></td>
+                    <td><?= $record['returned_at'] ?></td>
                 </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
+        <?= $pager->links(); ?>
         <div class="btn-group">
             <a href="<?= base_url('reports') ?>" class="btn btn-secondary">&larr; Back</a>
             <button class="btn btn-outline-primary">Export CSV</button>
