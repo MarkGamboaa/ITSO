@@ -53,7 +53,18 @@ class Equipment extends BaseController
         if ($check !== null) {
             return $check;
         }
-        $data = ['title' => 'Edit Equipment', 'id' => $id];
+        $equipmentmodel = model("Equipment_model");
+        $equipment = $equipmentmodel->find($id);
+
+        if (!$equipment) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Equipment not found");
+        }
+        
+        $data = [
+            'title' => 'Edit Equipment',
+            'equipment' => $equipment
+        ];
+
 
         return view('include/head_view', $data)
             .view('include/nav_view')
