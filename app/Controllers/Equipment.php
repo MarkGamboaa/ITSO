@@ -80,10 +80,22 @@ class Equipment extends BaseController
         $session = session();
         $validation = service('validation');
 
+        // Fetch existing equipment
+        $equipment = $equipmentModel->find($id);
+        if (!$equipment) {
+            $session->setFlashdata('errors', ['Equipment not found']);
+            return redirect()->to(base_url('equipment'));
+        }
+
+        $new_total = (int)$this->request->getPost('count');
+        $borrowed = $equipment['total_count'] - $equipment['available_count'];
+        $new_available = $new_total - $borrowed;
+        if ($new_available < 0) $new_available = 0;
+
         $data = [
             'name' => $this->request->getPost('name'),
-            'total_count' => $this->request->getPost('count'),
-            'available_count' => $this->request->getPost('count'),
+            'total_count' => $new_total,
+            'available_count' => $new_available,
             'accessories' => $this->request->getPost('accessories') ?? ''
         ];
 
@@ -92,10 +104,14 @@ class Equipment extends BaseController
             return redirect()->to(base_url('equipment/edit/' . $id))->withInput();
         }
 
+        // Clear rules and update
+        $equipmentModel->setValidationRules([]);
         $equipmentModel->update($id, $data);
+
         $session->setFlashdata('msg', 'Equipment updated successfully');
         return redirect()->to(base_url('equipment'));
-    }
+}
+
 
     public function view($id = null)
     {
