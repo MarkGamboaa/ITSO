@@ -47,29 +47,54 @@ class Equipment extends BaseController
             .view('include/foot_view');
     }
 
+ 
     public function edit($id = null)
-    {   
+    {
         $check = $this->auth();
         if ($check !== null) {
             return $check;
         }
-        $equipmentmodel = model("Equipment_model");
-        $equipment = $equipmentmodel->find($id);
+
+        $equipmentModel = model('Equipment_model');
+        $equipment = $equipmentModel->find($id);
 
         if (!$equipment) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Equipment not found");
         }
-        
+
         $data = [
-            'title' => 'Edit Equipment',
+            'title'     => 'Edit Equipment',
             'equipment' => $equipment
         ];
 
-
         return view('include/head_view', $data)
-            .view('include/nav_view')
-            .view('ITSO/equipment/edit_equipment_view', $data)
-            .view('include/foot_view');
+            . view('include/nav_view')
+            . view('ITSO/equipment/edit_equipment_view', $data)
+            . view('include/foot_view');
+    }
+
+    
+    public function update($id = null)
+    {
+        $equipmentModel = model('Equipment_model');
+        $session = session();
+        $validation = service('validation');
+
+        $data = [
+            'name' => $this->request->getPost('name'),
+            'total_count' => $this->request->getPost('count'),
+            'available_count' => $this->request->getPost('count'),
+            'accessories' => $this->request->getPost('accessories') ?? ''
+        ];
+
+        if (!$validation->run($data, 'equipment_update')) {
+            $session->setFlashdata('errors', $validation->getErrors());
+            return redirect()->to(base_url('equipment/edit/' . $id))->withInput();
+        }
+
+        $equipmentModel->update($id, $data);
+        $session->setFlashdata('msg', 'Equipment updated successfully');
+        return redirect()->to(base_url('equipment'));
     }
 
     public function view($id = null)
