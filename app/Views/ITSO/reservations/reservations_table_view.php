@@ -5,7 +5,7 @@
             <i class="bi bi-calendar-plus"></i> Reserve Equipment
         </a>
         <p>Only Associates can make reservations.</p>
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>User ID</th>

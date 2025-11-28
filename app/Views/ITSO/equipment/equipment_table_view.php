@@ -4,7 +4,7 @@
         <a href="<?= base_url('equipment/add') ?>" class="btn btn-success mb-3">
             <i class="bi bi-plus-circle"></i> Add Equipment
         </a>
-        <table class="table table-bordered">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -22,19 +22,26 @@
                             <td><?= esc($item['name']) ?></td>
                             <td><?= esc($item['available_count']) ?> / <?= esc($item['total_count']) ?></td>
                             <td><?= $item['is_active'] ? 'Available' : 'Inactive' ?></td>
-                            <td class="d-flex gap-2">
-                                <a class="btn btn-sm btn-primary" href="<?= base_url('equipment/view/'.$item['equipment_id']) ?>">
-                                    <i class="bi bi-eye"></i> View
-                                </a>
-                                <a class="btn btn-sm btn-secondary" href="<?= base_url('equipment/edit/'.$item['equipment_id']) ?>">
-                                    <i class="bi bi-pencil"></i> Edit
-                                </a>
-                                <a class="btn btn-sm btn-danger deactivate-equipment-btn" 
-                                   data-equipment-id="<?= $item['equipment_id'] ?>"
-                                   data-equipment-name="<?= esc($item['name']) ?>"
-                                   title="Deactivate Equipment">
-                                    <i class="bi bi-x-circle"></i> Deactivate
-                                </a>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-sm" 
+                                       style="background-color: #007bff; color: #fff; border: 1px solid #007bff;"
+                                       href="<?= base_url('equipment/view/'.$item['equipment_id']) ?>">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+                                    <a class="btn btn-sm" 
+                                       style="background-color: #6c757d; color: #fff; border: 1px solid #6c757d;"
+                                       href="<?= base_url('equipment/edit/'.$item['equipment_id']) ?>">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <button type="button" class="btn btn-sm deactivate-equipment-btn" 
+                                       style="background-color: #dc3545; color: #fff; border: 1px solid #dc3545;"
+                                       data-equipment-id="<?= $item['equipment_id'] ?>"
+                                       data-equipment-name="<?= esc($item['name']) ?>"
+                                       title="Deactivate Equipment">
+                                        <i class="bi bi-x-circle"></i> Deactivate
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

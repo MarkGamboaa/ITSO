@@ -4,7 +4,7 @@
         <a href="<?= base_url('returns/process') ?>" class="btn btn-primary mb-3">
             <i class="bi bi-arrow-return-left"></i> Process Return
         </a>
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>User ID</th>

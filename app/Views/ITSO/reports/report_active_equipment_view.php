@@ -1,6 +1,6 @@
 <main>
     <div class="itso-container">
-        <table class="table table-sm">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -26,7 +26,6 @@
 
         <div class="btn-group">
             <a href="<?= base_url('reports') ?>" class="btn btn-secondary">&larr; Back</a>
-            <button class="btn btn-outline-primary">Export CSV</button>
         </div>
     </div>
 </main>

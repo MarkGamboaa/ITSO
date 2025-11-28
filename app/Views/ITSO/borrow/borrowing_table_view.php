@@ -10,7 +10,7 @@
                     <i class="bi bi-clock-history"></i> Borrowing History
                 </a>
             </div>
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>User ID</th>

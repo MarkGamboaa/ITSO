@@ -10,7 +10,7 @@
                 <a href="<?= base_url('reports/userHistory') ?>" class="btn btn-outline-secondary">Clear</a>
             </div>
         </form>
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>User ID</th>
@@ -37,7 +37,6 @@
         <?= $pager->links(); ?>
         <div class="btn-group">
             <a href="<?= base_url('reports') ?>" class="btn btn-secondary">&larr; Back</a>
-            <button class="btn btn-outline-primary">Export CSV</button>
         </div>
     </div>
 </main>
